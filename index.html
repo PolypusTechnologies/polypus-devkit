@@ -5,25 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Polypus Master Dev Kit</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=JetBrains+Mono:wght@300;400;500&family=Instrument+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.3/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
-<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/CountUp.js/2.8.0/countUp.umd.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
 <style>
 :root {
-  --ink:#232430; --blue:#1BA2D2; --blue-dark:#0477AE;
+  --ink:#232430; --blue:#1BA2D2; --blue-dark:#0477AE; --blue-lt:#d6f0f9;
   --pink:#E4067D; --purple:#766A86; --bg:#EAF2FB;
   --surface:#dbeaf6; --border:#c8dff0; --white:#fff;
   --green:#0a7040; --amber:#b45000; --red:#b52a1c;
@@ -36,6 +20,10 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--i
 /* HEADER */
 .hdr{background:var(--ink);position:sticky;top:0;z-index:1000;padding:0 32px;height:56px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(27,162,210,.2)}
 .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;background:linear-gradient(135deg,#1BA2D2,#E4067D);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hdr-meta{font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,.35);display:flex;gap:20px;align-items:center}
+.hdr-meta strong{color:#1BA2D2;font-size:14px;font-weight:700}
+.hdr-meta .pink{color:#E4067D}
+.kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:3px;padding:1px 5px;color:rgba(255,255,255,.7)}
 
 /* SIDEBAR */
 .layout{display:flex;min-height:calc(100vh - 56px)}
@@ -43,26 +31,30 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--i
 .sidebar::-webkit-scrollbar{width:3px}
 .sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
 .s-section{padding:10px 16px 4px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.25)}
-.s-item{display:flex;align-items:center;gap:8px;padding:7px 16px;cursor:pointer;color:rgba(255,255,255,.5);font-size:12px;transition:all .15s;border-left:2px solid transparent}
+.s-item{display:flex;align-items:center;gap:8px;padding:7px 16px;cursor:pointer;color:rgba(255,255,255,.5);font-size:12px;transition:all .15s;border-left:2px solid transparent;background:none;border-top:none;border-right:none;border-bottom:none;width:100%;text-align:left;font-family:inherit}
 .s-item:hover{color:white;background:rgba(255,255,255,.04)}
 .s-item.active{color:#1BA2D2;border-left-color:#1BA2D2;background:rgba(27,162,210,.07)}
+.s-item:focus-visible{outline:2px solid #1BA2D2;outline-offset:-2px}
 .s-count{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10px;background:rgba(255,255,255,.08);padding:1px 6px;border-radius:8px;color:rgba(255,255,255,.4)}
 
 /* MAIN */
 .main{flex:1;padding:28px 32px;overflow-x:hidden}
 
 /* SEARCH */
-.search-bar{display:flex;gap:10px;margin-bottom:24px}
+.search-bar{display:flex;gap:10px;margin-bottom:14px}
 .search-input{flex:1;font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--white);border:1px solid var(--border);border-radius:8px;padding:10px 16px;outline:none;transition:border .15s}
 .search-input:focus{border-color:var(--blue)}
 .search-input::placeholder{color:var(--purple)}
+.btn-dark{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--ink);color:white;border:none;padding:10px 18px;border-radius:8px;cursor:pointer;white-space:nowrap}
+.btn-dark:hover{background:#3a3b4a}
 
-/* STATS BAR */
-.stats-bar{display:grid;grid-template-columns:repeat(8,1fr);gap:10px;margin-bottom:24px}
-.stat-pill{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:10px 12px;text-align:center;cursor:pointer;transition:all .15s}
-.stat-pill:hover,.stat-pill.active{border-color:var(--blue);background:var(--blue-lt, #d6f0f9)}
-.stat-n{font-family:'Syne',sans-serif;font-weight:800;font-size:20px}
-.stat-l{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--purple);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+/* PROJECT CHIPS */
+.chips{display:flex;gap:6px;margin-bottom:22px;flex-wrap:wrap}
+.chip{font-family:'JetBrains Mono',monospace;font-size:10px;background:var(--white);border:1px solid var(--border);color:var(--purple);padding:5px 11px;border-radius:20px;cursor:pointer;transition:all .15s}
+.chip:hover{border-color:var(--blue);color:var(--blue-dark)}
+.chip.active{background:var(--ink);color:white;border-color:var(--ink)}
+.chip.fav{color:var(--amber)}
+.chip.fav.active{background:var(--amber);color:white;border-color:var(--amber)}
 
 /* GRID */
 .lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
@@ -74,34 +66,35 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--i
 .lib-cdn{font-family:'JetBrains Mono',monospace;font-size:9px;background:#0f0f1a;color:#88c0d0;padding:7px 10px;border-radius:5px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:background .15s}
 .lib-cdn:hover{background:#1a1a2e}
 .tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 7px;border-radius:3px;font-weight:600;letter-spacing:.04em;margin-right:4px;margin-bottom:6px}
-.copy-btn{position:absolute;top:10px;right:10px;font-family:'JetBrains Mono',monospace;font-size:9px;background:var(--surface);border:1px solid var(--border);color:var(--purple);padding:3px 8px;border-radius:4px;cursor:pointer;transition:all .15s}
+.proj-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 7px;border-radius:3px;font-weight:600;letter-spacing:.04em;margin-right:4px;margin-bottom:6px;background:var(--ink);color:white}
+.copy-btn{position:absolute;top:10px;right:40px;font-family:'JetBrains Mono',monospace;font-size:9px;background:var(--surface);border:1px solid var(--border);color:var(--purple);padding:3px 8px;border-radius:4px;cursor:pointer;transition:all .15s}
 .copy-btn:hover{background:var(--blue);color:white;border-color:var(--blue)}
+.fav-btn{position:absolute;top:10px;right:10px;font-size:16px;background:none;border:none;cursor:pointer;line-height:1;color:var(--border);padding:2px;transition:all .15s}
+.fav-btn:hover{transform:scale(1.2)}
+.fav-btn.starred{color:var(--amber)}
 
 /* PYTHON SECTION */
-.py-section{margin-bottom:32px}
-.py-title{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;margin-bottom:4px;display:flex;align-items:center;gap:8px}
-.py-sub{font-size:12px;color:var(--purple);margin-bottom:12px}
 .py-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
-.py-pkg{background:var(--white);border:1px solid var(--border);border-radius:7px;padding:11px 13px;display:flex;flex-direction:column;gap:3px;cursor:pointer;transition:all .15s}
+.py-pkg{background:var(--white);border:1px solid var(--border);border-radius:7px;padding:11px 13px;display:flex;flex-direction:column;gap:3px;cursor:pointer;transition:all .15s;position:relative}
 .py-pkg:hover{border-color:var(--blue);background:#f0f8fd}
 .py-pkg-name{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:var(--ink)}
 .py-pkg-desc{font-size:11px;color:var(--purple);line-height:1.4}
 .py-install{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--blue-dark)}
+.py-pkg .fav-btn{top:6px;right:6px;font-size:13px}
 
 /* TOAST */
 .toast{position:fixed;bottom:20px;right:20px;background:var(--ink);color:white;font-family:'JetBrains Mono',monospace;font-size:11px;padding:9px 16px;border-radius:7px;z-index:9999;opacity:0;transform:translateY(6px);transition:all .2s;pointer-events:none;border-left:3px solid var(--blue)}
 .toast.show{opacity:1;transform:translateY(0)}
 
 /* PIP SCRIPT */
-.pip-block{background:#0f0f1a;border-radius:10px;padding:20px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#88c0d0;line-height:1.8;position:relative;overflow-x:auto;margin-bottom:24px}
-.pip-comment{color:rgba(255,255,255,.25)}
-.pip-cmd{color:#E4067D}
-.pip-pkg{color:#1BA2D2}
+.pip-block{background:#0f0f1a;border-radius:10px;padding:20px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#88c0d0;line-height:1.8;position:relative;overflow-x:auto;margin-bottom:24px;white-space:pre-wrap;word-break:break-all}
 
 /* SECTION HEADER */
 .sec-hdr{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border)}
 .sec-hdr-title{font-family:'Syne',sans-serif;font-weight:700;font-size:20px}
 .sec-hdr-count{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--surface);border:1px solid var(--border);padding:3px 10px;border-radius:20px;color:var(--purple)}
+.sec-hdr-meta{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--purple)}
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 </style>
 </head>
 <body>
@@ -109,13 +102,10 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--i
 <!-- HEADER -->
 <div class="hdr">
   <div class="logo">Polypus Master Dev Kit</div>
-  <div style="display:flex;align-items:center;gap:20px">
-    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,.35)">
-      <span id="total-count" style="color:#1BA2D2;font-size:14px;font-weight:700">0</span> libraries &amp; packages
-    </div>
-    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,.35)">
-      <span style="color:#E4067D;font-size:14px;font-weight:700">12</span> categories
-    </div>
+  <div class="hdr-meta">
+    <span><strong id="total-count">0</strong> libraries &amp; packages</span>
+    <span><strong class="pink" id="cat-count">15</strong> categories</span>
+    <span><span class="kbd">/</span> search · <span class="kbd">Esc</span> clear</span>
   </div>
 </div>
 
@@ -124,37 +114,46 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--i
 <!-- SIDEBAR -->
 <nav class="sidebar" id="sidebar">
   <div class="s-section">Frontend JS</div>
-  <div class="s-item active" onclick="showSection('animation',this)">🎬 Animation<span class="s-count" id="sc-animation">0</span></div>
-  <div class="s-item" onclick="showSection('charts',this)">📊 Charts & Dataviz<span class="s-count" id="sc-charts">0</span></div>
-  <div class="s-item" onclick="showSection('3d',this)">🧊 3D & Canvas<span class="s-count" id="sc-3d">0</span></div>
-  <div class="s-item" onclick="showSection('ui',this)">🎨 UI Components<span class="s-count" id="sc-ui">0</span></div>
-  <div class="s-item" onclick="showSection('maps',this)">🗺 Maps & Geo<span class="s-count" id="sc-maps">0</span></div>
-  <div class="s-item" onclick="showSection('media',this)">🎵 Audio & Video<span class="s-count" id="sc-media">0</span></div>
-  <div class="s-item" onclick="showSection('utility',this)">🔧 Utilities<span class="s-count" id="sc-utility">0</span></div>
-  <div class="s-item" onclick="showSection('realtime',this)">⚡ Realtime<span class="s-count" id="sc-realtime">0</span></div>
+  <button class="s-item active" data-section="animation" type="button">🎬 Animation<span class="s-count" id="sc-animation">0</span></button>
+  <button class="s-item" data-section="charts" type="button">📊 Charts &amp; Dataviz<span class="s-count" id="sc-charts">0</span></button>
+  <button class="s-item" data-section="3d" type="button">🧊 3D &amp; Canvas<span class="s-count" id="sc-3d">0</span></button>
+  <button class="s-item" data-section="ui" type="button">🎨 UI Components<span class="s-count" id="sc-ui">0</span></button>
+  <button class="s-item" data-section="maps" type="button">🗺 Maps &amp; Geo<span class="s-count" id="sc-maps">0</span></button>
+  <button class="s-item" data-section="media" type="button">🎵 Audio &amp; Video<span class="s-count" id="sc-media">0</span></button>
+  <button class="s-item" data-section="utility" type="button">🔧 Utilities<span class="s-count" id="sc-utility">0</span></button>
+  <button class="s-item" data-section="realtime" type="button">⚡ Realtime<span class="s-count" id="sc-realtime">0</span></button>
   <div class="s-section">Python</div>
-  <div class="s-item" onclick="showSection('py-ai',this)">🤖 AI & LLM<span class="s-count" id="sc-py-ai">0</span></div>
-  <div class="s-item" onclick="showSection('py-data',this)">📈 Data & ML<span class="s-count" id="sc-py-data">0</span></div>
-  <div class="s-item" onclick="showSection('py-web',this)">🕷 Scraping & Web<span class="s-count" id="sc-py-web">0</span></div>
-  <div class="s-item" onclick="showSection('py-backend',this)">⚙️ Backend & APIs<span class="s-count" id="sc-py-backend">0</span></div>
-  <div class="s-item" onclick="showSection('py-finance',this)">💹 Finance & Trading<span class="s-count" id="sc-py-finance">0</span></div>
-  <div class="s-item" onclick="showSection('py-docs',this)">📄 Documents<span class="s-count" id="sc-py-docs">0</span></div>
-  <div class="s-item" onclick="showSection('py-util',this)">🛠 Python Utils<span class="s-count" id="sc-py-util">0</span></div>
+  <button class="s-item" data-section="py-ai" type="button">🤖 AI &amp; LLM<span class="s-count" id="sc-py-ai">0</span></button>
+  <button class="s-item" data-section="py-data" type="button">📈 Data &amp; ML<span class="s-count" id="sc-py-data">0</span></button>
+  <button class="s-item" data-section="py-web" type="button">🕷 Scraping &amp; Web<span class="s-count" id="sc-py-web">0</span></button>
+  <button class="s-item" data-section="py-backend" type="button">⚙️ Backend &amp; APIs<span class="s-count" id="sc-py-backend">0</span></button>
+  <button class="s-item" data-section="py-finance" type="button">💹 Finance &amp; Trading<span class="s-count" id="sc-py-finance">0</span></button>
+  <button class="s-item" data-section="py-docs" type="button">📄 Documents<span class="s-count" id="sc-py-docs">0</span></button>
+  <button class="s-item" data-section="py-util" type="button">🛠 Python Utils<span class="s-count" id="sc-py-util">0</span></button>
   <div class="s-section">Install Scripts</div>
-  <div class="s-item" onclick="showSection('install',this)">📦 Full pip install</div>
-  <div class="s-item" onclick="showSection('install',this)">📦 Node globals</div>
+  <button class="s-item" data-section="install-py" type="button">📦 Full pip install</button>
+  <button class="s-item" data-section="install-node" type="button">📦 Node globals</button>
+  <button class="s-item" data-section="install-bundle" type="button">📦 JS CDN bundle</button>
 </nav>
 
 <!-- MAIN -->
 <main class="main">
 
-  <!-- SEARCH -->
   <div class="search-bar">
-    <input class="search-input" id="search" placeholder="Search any library or package... (e.g. 'chart', 'scrape', 'animation')" oninput="searchLibs(this.value)">
-    <button onclick="copyAllPip()" style="font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--ink);color:white;border:none;padding:10px 18px;border-radius:8px;cursor:pointer;white-space:nowrap">Copy pip install all</button>
+    <input class="search-input" id="search" placeholder="Search any library or package...    /  to focus  ·  Esc  to clear" oninput="searchLibs(this.value)" autocomplete="off">
+    <button class="btn-dark" onclick="copyAllPip()">Copy pip install all</button>
   </div>
 
-  <!-- CONTENT AREA -->
+  <!-- PROJECT FILTER CHIPS -->
+  <div class="chips" id="chips">
+    <button class="chip active" data-proj="all">All</button>
+    <button class="chip fav" data-proj="fav">★ Favorites</button>
+    <button class="chip" data-proj="SAGE">SAGE</button>
+    <button class="chip" data-proj="MIRROR">MIRROR</button>
+    <button class="chip" data-proj="ATLAS">ATLAS</button>
+    <button class="chip" data-proj="STUDIO">STUDIO</button>
+  </div>
+
   <div id="content"></div>
 
 </main>
@@ -162,418 +161,488 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--i
 
 <div class="toast" id="toast">Copied!</div>
 
+<!-- ═══════════════════════════════════════════════════════
+     MASTER LIBRARY DATA — single source of truth
+     Python verifier reads this same block, so keep in sync.
+     ═══════════════════════════════════════════════════════ -->
+<script type="application/json" id="devkit-data">
+{
+"generated":"2026-04-23",
+"js":{
+"animation":[
+{"name":"GSAP","desc":"The gold standard for web animation. Timelines, scroll triggers, morphing, text effects. Used by Apple, Google, NASA.","use":"Slide transitions, number reveals, hero animations, scroll-driven UIs","cdn":"https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js","tags":["Animation","Pro"],"projects":["MIRROR","STUDIO"]},
+{"name":"GSAP ScrollTrigger","desc":"GSAP plugin. Trigger any animation based on scroll position. Scrub, pin, snap.","use":"Scroll-based storytelling, parallax dashboards, on-scroll reveals","cdn":"https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js","tags":["Animation","Scroll"],"projects":["STUDIO"]},
+{"name":"GSAP TextPlugin","desc":"GSAP plugin. Type text character by character with full easing control.","use":"AI typing effect, terminal output simulation, live feed text","cdn":"https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js","tags":["Animation","Text"],"projects":["SAGE"]},
+{"name":"Anime.js","desc":"Lightweight alternative to GSAP. CSS, SVG, DOM and JS object animations. Great for simple UI motion.","use":"Icon bounce effects, loading states, card entrances","cdn":"https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js","tags":["Animation"],"projects":[]},
+{"name":"Lottie Web","desc":"Render After Effects animations exported as JSON. 500k+ free animations on LottieFiles.","use":"Loading spinners, success checkmarks, empty states, onboarding illustrations","cdn":"https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js","tags":["Animation","Design"],"projects":["STUDIO"]},
+{"name":"Typed.js","desc":"Typewriter effect library. Types and deletes strings with configurable speed and cursor.","use":"Hero section headlines, AI response simulation, terminal demos","cdn":"https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.16/typed.umd.js","tags":["Animation","Text"],"projects":[]},
+{"name":"AOS","desc":"Animate On Scroll. Add data-aos attributes to any element for scroll-triggered entrance animations.","use":"Landing page sections, feature reveals, statistics counters on scroll","cdn":"https://unpkg.com/aos@2.3.1/dist/aos.js","tags":["Animation","Scroll"],"projects":[]},
+{"name":"Rellax","desc":"Buttery smooth parallax scrolling. Any element scrolls at a different speed creating depth.","use":"Hero backgrounds, decorative elements, pitch deck depth effects","cdn":"https://cdnjs.cloudflare.com/ajax/libs/rellax/1.12.1/rellax.min.js","tags":["Animation","Scroll"],"projects":[]},
+{"name":"CountUp.js","desc":"Animated number counters. Smooth count from 0 to any number with easing, decimals, prefix, suffix.","use":"Dashboard KPI reveals, stats sections, ROAS counters, live metrics","cdn":"https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.js","tags":["Animation","Numbers"],"projects":["MIRROR","STUDIO"]},
+{"name":"Velocity.js","desc":"Fast DOM animation engine. jQuery-compatible API but much faster. Hardware accelerated.","use":"Complex multi-step UI animations, legacy project upgrades","cdn":"https://cdnjs.cloudflare.com/ajax/libs/velocity/2.0.6/velocity.min.js","tags":["Animation"],"projects":[]},
+{"name":"Motion One","desc":"Modern animation library built on the Web Animations API. Tiny and incredibly fast.","use":"Micro-interactions, gesture-driven UI, React/Vue animations","cdn":"https://unpkg.com/motion@11.11.17/dist/motion.js","tags":["Animation","Modern"],"projects":[]}
+],
+"charts":[
+{"name":"Chart.js","desc":"The most popular charting library. 8 chart types, all animated, easy API. Perfect for standard dashboards.","use":"Bar charts, line charts, doughnut charts in all dashboards","cdn":"https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js","tags":["Charts","Simple"],"projects":["STUDIO","MIRROR"]},
+{"name":"ApexCharts","desc":"Advanced charts with real-time updates, zoom, pan, candlestick, heatmap, treemap. Better than Chart.js for complex data.","use":"ATLAS trading charts, MIRROR AB testing, SAGE ticket heatmaps","cdn":"https://cdn.jsdelivr.net/npm/apexcharts@3.49.1/dist/apexcharts.min.js","tags":["Charts","Advanced","Realtime"],"projects":["ATLAS","MIRROR","SAGE"]},
+{"name":"D3.js","desc":"The most powerful data visualization library ever built. Unlimited custom visualizations using SVG and Canvas.","use":"Network graphs, force-directed layouts, geographic choropleth, custom viz","cdn":"https://d3js.org/d3.v7.min.js","tags":["Charts","Custom","Advanced"],"projects":[]},
+{"name":"ECharts","desc":"Apache ECharts. Extremely powerful, handles millions of data points. Better performance than D3 for large datasets.","use":"Fleet monitoring dashboards, real-time telemetry, 3D bar charts","cdn":"https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js","tags":["Charts","Performance","3D"],"projects":["SAGE"]},
+{"name":"Plotly.js","desc":"Interactive scientific charts. Box plots, violin, contour, 3D scatter, geo maps. Used by data scientists.","use":"ATLAS strategy analysis, ML model outputs, statistical reporting","cdn":"https://cdn.plot.ly/plotly-2.35.2.min.js","tags":["Charts","Scientific","3D"],"projects":["ATLAS"]},
+{"name":"Frappe Charts","desc":"GitHub-style charts. Beautiful heatmaps, percentage bars, line and bar. Zero config, just data in.","use":"Ticket frequency calendars, commit-style activity grids, sprint burndown","cdn":"https://cdn.jsdelivr.net/npm/frappe-charts@1.6.2/dist/frappe-charts.min.umd.js","tags":["Charts","Simple"],"projects":["STUDIO"]},
+{"name":"uPlot","desc":"Insanely fast lightweight chart library. Renders 100k+ data points smoothly. For live time-series.","use":"ATLAS real-time price charts, endpoint telemetry streams, log graphs","cdn":"https://cdn.jsdelivr.net/npm/uplot@1.6.31/dist/uPlot.iife.min.js","tags":["Charts","Performance","Realtime"],"projects":["ATLAS","SAGE"]},
+{"name":"ProgressBar.js","desc":"Animated SVG progress bars and circles. Fully configurable colors, stroke, easing, text.","use":"Endpoint health rings, campaign budget gauges, sprint progress circles","cdn":"https://cdn.jsdelivr.net/npm/progressbar.js@1.1.0/dist/progressbar.min.js","tags":["Charts","UI"],"projects":["SAGE","MIRROR","STUDIO"]},
+{"name":"Gauge.js","desc":"Beautiful animated gauge charts. Like a speedometer. Perfect for single KPI display.","use":"ROAS gauge, FCR rate, endpoint health score, ATLAS win rate","cdn":"https://cdn.jsdelivr.net/gh/bernii/gauge.js@master/dist/gauge.min.js","tags":["Charts","KPI"],"projects":["ATLAS","MIRROR","SAGE"]},
+{"name":"wordcloud2.js","desc":"Generates word clouds in Canvas. Size words by frequency. Beautiful for text analysis.","use":"Ticket keyword clouds, competitor ad copy analysis, client request themes","cdn":"https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/src/wordcloud2.js","tags":["Charts","Text"],"projects":["SAGE","MIRROR"]},
+{"name":"Billboard.js","desc":"D3-based chart library with simpler API. NVD3 successor. Great middle ground between Chart.js and D3.","use":"Complex multi-series line charts, combination charts, grouped bars","cdn":"https://cdn.jsdelivr.net/npm/billboard.js/dist/billboard.min.js","tags":["Charts"],"projects":[]},
+{"name":"Mermaid","desc":"Diagrams and flowcharts from text. Flowcharts, sequence, class, state, gantt, pie, ER diagrams.","use":"Architecture diagrams in docs, pitch deck diagrams, SAGE workflow visualizations","cdn":"https://cdn.jsdelivr.net/npm/mermaid@11.4.0/dist/mermaid.min.js","tags":["Charts","Diagrams"],"projects":["SAGE","STUDIO"]}
+],
+"3d":[
+{"name":"Three.js","desc":"The standard WebGL library. Build full 3D scenes, models, lighting, cameras, shaders. Massive ecosystem.","use":"Agent office 3D environment, 3D data globe, hero background scenes","cdn":"https://unpkg.com/three@0.160.0/build/three.min.js","tags":["3D","WebGL"],"projects":["STUDIO"]},
+{"name":"Babylon.js","desc":"Full 3D game engine in the browser. Physics, collisions, shadows, VR/AR support. More complete than Three.js.","use":"Interactive product demos, 3D client environment maps, immersive dashboards","cdn":"https://cdn.babylonjs.com/babylon.js","tags":["3D","WebGL","Engine"],"projects":[]},
+{"name":"PixiJS","desc":"2D WebGL renderer. Insanely fast 2D sprites, particles, filters. Best for 2D canvas performance.","use":"Real-time data visualizations, animated dashboards, particle systems","cdn":"https://cdn.jsdelivr.net/npm/pixi.js@7.4.2/dist/pixi.min.js","tags":["2D","WebGL","Performance"],"projects":["STUDIO"]},
+{"name":"Fabric.js","desc":"HTML5 Canvas made easy. Draw, drag, scale, rotate objects. Full canvas interactivity.","use":"Image editor, whiteboard tools, ad creative builder, diagram editor","cdn":"https://cdn.jsdelivr.net/npm/fabric@5.3.0/dist/fabric.min.js","tags":["Canvas","2D"],"projects":["MIRROR"]},
+{"name":"Konva.js","desc":"2D Canvas framework for desktop and mobile. Layers, events, drag and drop, animations.","use":"Interactive network diagrams, floor plans, node-based editors","cdn":"https://unpkg.com/konva@9/konva.min.js","tags":["Canvas","2D","Interactive"],"projects":[]},
+{"name":"Rough.js","desc":"Creates graphics that look hand-drawn. Sketchy aesthetic for any shape or path.","use":"Wireframe-style prototypes, playful dashboards, design assets","cdn":"https://unpkg.com/roughjs@4.6.6/bundled/rough.js","tags":["Canvas","Design"],"projects":[]},
+{"name":"Zdog","desc":"Flat, round, designer-friendly pseudo-3D engine. Beautiful 3D illustrations with minimal code.","use":"Logo animations, icon 3D effects, decorative UI elements","cdn":"https://unpkg.com/zdog@1.1.3/dist/zdog.dist.min.js","tags":["3D","Design"],"projects":[]},
+{"name":"Particles.js","desc":"Configurable particle and network backgrounds. Connect dots, repel on hover, custom shapes.","use":"Hero sections, cover slides, loading screens, ambient UI backgrounds","cdn":"https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js","tags":["3D","Background"],"projects":[]},
+{"name":"tsParticles","desc":"Evolved particles.js. More shapes, connections, polygon masks, fireworks, confetti, snow.","use":"Celebration animations, dynamic backgrounds, interactive hero sections","cdn":"https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js","tags":["3D","Background","Interactive"],"projects":[]},
+{"name":"Matter.js","desc":"2D physics engine. Rigid bodies, collision detection, gravity, constraints, composites.","use":"Interactive UI physics, bouncing elements, game mechanics","cdn":"https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js","tags":["Physics","2D"],"projects":[]}
+],
+"ui":[
+{"name":"Tailwind CSS","desc":"Utility-first CSS. Build any design without leaving HTML. 10x faster than custom CSS. Must-have.","use":"Every single project. Replaces custom CSS almost entirely.","cdn":"https://cdn.tailwindcss.com","tags":["CSS","Framework","Essential"],"projects":["SAGE","MIRROR","ATLAS","STUDIO"]},
+{"name":"Alpine.js","desc":"Lightweight reactivity in HTML attributes. No build step. Replaces jQuery for simple interactivity.","use":"Dropdowns, tabs, modals, toggles, state management without React","cdn":"https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js","tags":["JS","Reactivity"],"projects":[]},
+{"name":"React","desc":"The UI library. Production UMD build. Pair with ReactDOM for browser rendering without a build step.","use":"Studio OS dashboard components, Mirror admin panels, any reactive UI","cdn":"https://unpkg.com/react@18.3.1/umd/react.production.min.js","tags":["JS","Framework","Essential"],"projects":["STUDIO","MIRROR"]},
+{"name":"ReactDOM","desc":"DOM renderer for React. Required companion to React. Production UMD build.","use":"Renders React components into the DOM in every Studio OS view","cdn":"https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js","tags":["JS","Framework","Essential"],"projects":["STUDIO","MIRROR"]},
+{"name":"Framer Motion","desc":"The animation library for React. Gestures, layout animations, springs, variants.","use":"Studio OS page transitions, Kanban card drag, modal springs","cdn":"https://unpkg.com/framer-motion@11.11.1/dist/framer-motion.js","tags":["JS","React","Animation"],"projects":["STUDIO"]},
+{"name":"Lucide Icons","desc":"1,400+ consistent, clean SVG icons. Each icon is identical stroke width and style.","use":"Replace all emoji in dashboards. Navigation, status, actions, categories.","cdn":"https://unpkg.com/lucide@latest/dist/umd/lucide.js","tags":["Icons","Essential"],"projects":["SAGE","MIRROR","ATLAS","STUDIO"]},
+{"name":"Heroicons","desc":"Beautiful hand-crafted SVG icons by Tailwind team. Outline and solid variants. Copy individual SVGs from heroicons.com — there's no JS bundle.","use":"Tailwind-native icon set for all Tailwind projects","cdn":"","tags":["Icons","SVG"],"projects":[]},
+{"name":"Phosphor Icons","desc":"Flexible icon family. 6 weights per icon — thin, light, regular, bold, fill, duotone. 1,200+ icons.","use":"Rich UI with multiple icon weights, design-heavy interfaces","cdn":"https://unpkg.com/@phosphor-icons/web","tags":["Icons","Design"],"projects":[]},
+{"name":"Tippy.js","desc":"Complete tooltip and popover solution. Hover, click, focus triggers. Animated, themeable, custom HTML.","use":"Help tooltips on every dashboard, data previews, context menus","cdn":"https://unpkg.com/tippy.js@6","tags":["UI","Tooltip"],"projects":["STUDIO","SAGE"]},
+{"name":"SweetAlert2","desc":"Beautiful replacement for browser alerts. Modals with custom buttons, inputs, timers, icons.","use":"Confirmation dialogs, delete confirmations, success messages, input prompts","cdn":"https://cdn.jsdelivr.net/npm/sweetalert2@11","tags":["UI","Modal"],"projects":[]},
+{"name":"Notyf","desc":"Elegant minimal toast notifications. Success, error, custom. 1.7kb gzipped.","use":"Agent status updates, save confirmations, error alerts in all dashboards","cdn":"https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js","tags":["UI","Notification"],"projects":["STUDIO","SAGE"]},
+{"name":"Toastify","desc":"Simple, flexible JavaScript toasts. Offset, duration, close button, custom class.","use":"Lightweight toast alternative when Notyf is too styled","cdn":"https://cdn.jsdelivr.net/npm/toastify-js","tags":["UI","Notification"],"projects":[]},
+{"name":"Flatpickr","desc":"Powerful, lightweight datetime picker. Range, time, multiple, disable dates. Zero dependencies.","use":"Report date ranges, schedule pickers, campaign date filters","cdn":"https://cdn.jsdelivr.net/npm/flatpickr","tags":["UI","Input","Dates"],"projects":["MIRROR","STUDIO"]},
+{"name":"Choices.js","desc":"Replacements for select inputs. Search, multi-select, custom rendering, tag input.","use":"Multi-client selectors, tag systems, product category filters","cdn":"https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js","tags":["UI","Input","Select"],"projects":["STUDIO"]},
+{"name":"IMask.js","desc":"Input masking. Phone numbers, dates, credit cards, custom patterns. Format as you type.","use":"Phone inputs, date entry, custom ID formats, currency inputs","cdn":"https://unpkg.com/imask","tags":["UI","Input","Format"],"projects":[]},
+{"name":"Cleave.js","desc":"Format input text as you type. Credit card, phone, date, numeral, custom delimiters.","use":"Payment forms, phone number inputs, structured ID entry","cdn":"https://cdn.jsdelivr.net/npm/cleave.js@1.6.0/dist/cleave.min.js","tags":["UI","Input","Format"],"projects":[]},
+{"name":"SortableJS","desc":"Drag and drop for any list or grid. Reorder, move between lists, touch support, animations.","use":"Kanban boards, priority lists, column reordering, playlist builders","cdn":"https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js","tags":["UI","Drag&Drop"],"projects":["STUDIO"]},
+{"name":"interact.js","desc":"Drag, resize, multi-touch gestures. More powerful than SortableJS. Full gesture control.","use":"Resizable dashboard panels, custom canvas interactions, drag-to-connect","cdn":"https://cdn.jsdelivr.net/npm/interact.js/dist/interact.min.js","tags":["UI","Drag&Drop","Gestures"],"projects":["STUDIO"]},
+{"name":"Quill","desc":"Rich text editor. Bold, italic, lists, code blocks, images, videos, custom formats.","use":"Email composer, proposal editor, knowledge base editor, ticket notes","cdn":"https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.js","tags":["UI","Editor"],"projects":["SAGE","STUDIO"]},
+{"name":"CodeMirror","desc":"The best in-browser code editor. 100+ language modes, themes, autocomplete, linting.","use":"Code editor in SAGE, PowerShell script builder, SQL query editor","cdn":"https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js","tags":["UI","Editor","Code"],"projects":["SAGE"]},
+{"name":"Highlight.js","desc":"Syntax highlighting for 190+ languages. Detect language automatically. 230+ themes.","use":"Code display everywhere, SAGE script viewer, API documentation","cdn":"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js","tags":["UI","Code","Syntax"],"projects":["SAGE"]},
+{"name":"Prism.js","desc":"Lightweight syntax highlighter. Cleaner output than Highlight.js. Better for documentation sites.","use":"Documentation display, tutorial code blocks, spec sheets","cdn":"https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js","tags":["UI","Code","Syntax"],"projects":[]},
+{"name":"DataTables","desc":"jQuery plugin for interactive HTML tables. Sort, search, paginate, export. Enterprise-grade.","use":"Large data tables in dashboards, exportable reports, PSA ticket lists","cdn":"https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js","tags":["UI","Tables","Data"],"projects":["SAGE"]},
+{"name":"Grid.js","desc":"Advanced JavaScript table component. Works with any framework. Sort, search, pagination, async.","use":"Client lists, ticket tables, product inventory, vendor comparison tables","cdn":"https://unpkg.com/gridjs/dist/gridjs.umd.js","tags":["UI","Tables"],"projects":["SAGE","STUDIO"]},
+{"name":"Tabulator","desc":"Feature-rich table library. Editable cells, row grouping, tree data, column calculations.","use":"Editable dashboards, live-updating data grids, financial tables","cdn":"https://unpkg.com/tabulator-tables@5.5.4/dist/js/tabulator.min.js","tags":["UI","Tables","Advanced"],"projects":["STUDIO","ATLAS"]},
+{"name":"Vanilla Tilt","desc":"GPU-accelerated 3D tilt hover effect on cards. Makes interfaces feel premium and tactile.","use":"Pitch deck cards, portfolio items, feature cards, landing pages","cdn":"https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js","tags":["UI","Effect"],"projects":["STUDIO"]},
+{"name":"Lenis","desc":"Smooth scroll library. Butter-smooth momentum scrolling on any page.","use":"Pitch decks, marketing pages, scroll-driven storytelling","cdn":"https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js","tags":["UI","Scroll"],"projects":["STUDIO"]},
+{"name":"GLightbox","desc":"Beautiful lightbox gallery. Images, videos, iframes, custom HTML. Touch, keyboard, zoom support.","use":"Image galleries, video demos, competitor ad image viewer","cdn":"https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js","tags":["UI","Gallery"],"projects":["MIRROR"]},
+{"name":"PhotoSwipe","desc":"Mobile-friendly image gallery and lightbox. Zoom, swipe, touch, keyboard navigation.","use":"Ad creative gallery, product image viewer, competitor ad library","cdn":"https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.3.8/umd/photoswipe.umd.min.js","tags":["UI","Gallery"],"projects":["MIRROR"]},
+{"name":"Cropper.js","desc":"JavaScript image cropping. Zoom, rotate, scale, flip. Output as canvas, blob, or base64.","use":"Profile photo upload, ad creative cropping, image preprocessing","cdn":"https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js","tags":["UI","Image"],"projects":["MIRROR"]},
+{"name":"Marked","desc":"Markdown to HTML. Blazing fast. Parse Claude AI responses into properly formatted HTML.","use":"AI chat responses, documentation rendering, proposal preview, README display","cdn":"https://cdn.jsdelivr.net/npm/marked/marked.min.js","tags":["UI","Text","AI"],"projects":["SAGE","STUDIO"]},
+{"name":"DOMPurify","desc":"XSS sanitizer. Cleans HTML before injecting. Essential when rendering user or AI-generated content.","use":"Security layer for all innerHTML from API responses, AI output, user input","cdn":"https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.8/purify.min.js","tags":["UI","Security","Essential"],"projects":["SAGE","STUDIO"]},
+{"name":"QRCode.js","desc":"Generate QR codes in the browser. Canvas or SVG output. Customizable size and color.","use":"Link sharing, mobile handoff, product pages, contact cards","cdn":"https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js","tags":["UI","QR"],"projects":[]},
+{"name":"jsPDF","desc":"Generate PDF documents entirely in JavaScript. Text, images, tables, shapes, custom fonts.","use":"Proposal generator, report export, invoice builder, pitch PDF export","cdn":"https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js","tags":["UI","PDF","Export"],"projects":["STUDIO"]},
+{"name":"html2canvas","desc":"Screenshot any DOM element as a canvas. Combine with jsPDF for HTML-to-PDF.","use":"Dashboard screenshot export, PDF report generation, share card creation","cdn":"https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js","tags":["UI","PDF","Export"],"projects":["STUDIO"]},
+{"name":"SheetJS","desc":"Read and write Excel files in the browser. Parse .xlsx, .csv, export data grids.","use":"Export dashboards to Excel, import client data, bulk data processing","cdn":"https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js","tags":["UI","Excel","Export"],"projects":["MIRROR","STUDIO"]},
+{"name":"Micromodal","desc":"Tiny accessible modal library. 1.9kb, WAI-ARIA compliant, keyboard navigation.","use":"Lightweight modals where SweetAlert2 is overkill","cdn":"https://unpkg.com/micromodal/dist/micromodal.min.js","tags":["UI","Modal"],"projects":[]},
+{"name":"KaTeX","desc":"Fast math typesetting. Renders LaTeX math notation beautifully in the browser.","use":"ATLAS strategy formulas, statistical reports, ML model documentation","cdn":"https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js","tags":["UI","Math","Science"],"projects":["ATLAS"]}
+],
+"maps":[
+{"name":"Leaflet","desc":"The leading open-source interactive map library. Lightweight, mobile-friendly, huge plugin ecosystem.","use":"Client location maps, delivery tracking, geo-targeted ad regions","cdn":"https://unpkg.com/leaflet@1.9.4/dist/leaflet.js","tags":["Maps","Open Source"],"projects":["MIRROR","STUDIO"]},
+{"name":"OpenLayers","desc":"Full-featured web mapping. WMS, vector tiles, raster, WebGL. More powerful than Leaflet.","use":"Complex geographic analysis, multi-layer maps, GIS integration","cdn":"https://cdn.jsdelivr.net/npm/ol@10.2.1/dist/ol.js","tags":["Maps","Advanced"],"projects":[]},
+{"name":"Mapbox GL JS","desc":"WebGL-powered vector maps. Smooth zoom, 3D terrain, custom styles, data layers. Best-looking maps.","use":"SF-ICT client map, MIRROR geo targeting, premium client-facing maps","cdn":"https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.js","tags":["Maps","3D","Premium"],"projects":["SAGE","MIRROR"]},
+{"name":"Deck.gl","desc":"WebGL-powered large-scale data visualization on maps. Handle millions of data points.","use":"Fleet endpoint map with real-time updates, delivery density maps","cdn":"https://unpkg.com/deck.gl@9.0.36/dist.min.js","tags":["Maps","DataViz","Performance"],"projects":["SAGE"]}
+],
+"media":[
+{"name":"Howler.js","desc":"Audio library for the modern web. Web Audio API and HTML5 Audio. Spatial audio, sprites, streaming.","use":"Sound effects in dashboards, alert sounds, audio feedback","cdn":"https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js","tags":["Audio"],"projects":["STUDIO"]},
+{"name":"Tone.js","desc":"Web Audio framework for creating interactive music and sound effects. Synthesizers, effects, sequencers.","use":"Custom alert tones, audio visualizations, experimental UI sound design","cdn":"https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js","tags":["Audio","Music"],"projects":[]},
+{"name":"Wavesurfer.js","desc":"Navigable waveform visualization. Play, pause, seek, zoom. Regions, markers, plugins.","use":"Call recording playback, audio file analysis, voiceover preview","cdn":"https://unpkg.com/wavesurfer.js@7/dist/wavesurfer.min.js","tags":["Audio","Visualization"],"projects":["SAGE","MIRROR"]},
+{"name":"Video.js","desc":"The web video player. HTML5 video, HLS, DASH, DRM. Plugins for everything. 400k sites use it.","use":"Tutorial videos, product demos, ad creative preview, client presentations","cdn":"https://vjs.zencdn.net/8.16.1/video.min.js","tags":["Video","Player"],"projects":["MIRROR","STUDIO"]},
+{"name":"Plyr","desc":"Clean, accessible, customizable HTML5 media player. Video, audio, YouTube, Vimeo support.","use":"Embedded video players, training content, ad video preview","cdn":"https://cdn.plyr.io/3.7.8/plyr.js","tags":["Video","Player"],"projects":["MIRROR"]},
+{"name":"MediaPipe","desc":"Google's ML solutions for media. Hand tracking, face detection, pose estimation, object detection.","use":"Gesture-controlled interfaces, video AI analysis, AR experiments","cdn":"https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0","tags":["Video","AI","ML"],"projects":[]},
+{"name":"FFmpeg.wasm","desc":"FFmpeg running in the browser via WebAssembly. Transcode, trim, resize video client-side.","use":"MIRROR ad creative processing, video trimming in browser, preview generation","cdn":"https://unpkg.com/@ffmpeg/ffmpeg@0.12.10/dist/umd/ffmpeg.js","tags":["Video","WASM"],"projects":["MIRROR"]}
+],
+"utility":[
+{"name":"Axios","desc":"The best HTTP client. Interceptors, automatic JSON, request cancellation, CSRF protection.","use":"Every single API call — Claude API, Meta API, Shopify, all external services","cdn":"https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js","tags":["HTTP","Essential"],"projects":["SAGE","MIRROR","ATLAS","STUDIO"]},
+{"name":"Lodash","desc":"200+ utility functions for JS. Arrays, objects, strings, numbers, functions. Prevents wheel reinvention.","use":"Data manipulation, debouncing, deep cloning, array grouping, transformations","cdn":"https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js","tags":["Utility","Data","Essential"],"projects":["SAGE","MIRROR","ATLAS","STUDIO"]},
+{"name":"Day.js","desc":"2kb Moment.js alternative. Parse, validate, manipulate, display dates and times.","use":"Ticket timestamps, ad run duration, reporting periods, relative time display","cdn":"https://cdn.jsdelivr.net/npm/dayjs@1.11.13/dayjs.min.js","tags":["Utility","Dates"],"projects":["SAGE","MIRROR","STUDIO"]},
+{"name":"date-fns","desc":"Modular date utility library. Only import what you need. 200+ functions, immutable, pure.","use":"Complex date calculations, timezone handling, business day logic","cdn":"https://cdn.jsdelivr.net/npm/date-fns@3.6.0/cdn.min.js","tags":["Utility","Dates"],"projects":[]},
+{"name":"UUID","desc":"Generate RFC4122 UUIDs. V1 (timestamp), V4 (random), V5 (namespace). Unique ID generation.","use":"Unique IDs for tickets, sessions, database records, API keys","cdn":"https://cdn.jsdelivr.net/npm/uuid@9.0.1/dist/umd/uuid.min.js","tags":["Utility","ID"],"projects":["SAGE","STUDIO"]},
+{"name":"Fuse.js","desc":"Lightweight fuzzy search. Client-side search with scoring, threshold, weighting. No server needed.","use":"Dashboard search bars, library search (like this one!), product finder","cdn":"https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js","tags":["Utility","Search"],"projects":["STUDIO","SAGE"]},
+{"name":"Chroma.js","desc":"Color manipulation library. Convert, mix, scale, generate color palettes from any color space.","use":"Dynamic theming, heatmap color scales, data visualization color generation","cdn":"https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js","tags":["Utility","Colors","Design"],"projects":["STUDIO"]},
+{"name":"FileSaver.js","desc":"Client-side file saving. Download any Blob, File, or data URL with a filename.","use":"Export dashboards to file, download generated PDFs, save canvas images","cdn":"https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js","tags":["Utility","Files","Export"],"projects":["STUDIO","MIRROR"]},
+{"name":"PapaParse","desc":"The best CSV parser for JavaScript. Streaming, Web Workers, auto-detect delimiter.","use":"Import ad data, client lists, financial exports, bulk product uploads","cdn":"https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js","tags":["Utility","CSV","Data"],"projects":["MIRROR","ATLAS"]},
+{"name":"JSZip","desc":"Create, read, edit ZIP files in JavaScript. Compress multiple files client-side.","use":"Bulk export, project download packages, multi-file deliverables","cdn":"https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js","tags":["Utility","Files","Compression"],"projects":["STUDIO"]},
+{"name":"Clipboard.js","desc":"Modern clipboard access. Copy text or HTML to clipboard without Flash. 3kb.","use":"Copy CDN links, copy code snippets, copy API keys, one-click share","cdn":"https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js","tags":["Utility","UX"],"projects":[]},
+{"name":"Crypto-JS","desc":"Cryptographic algorithms in JavaScript. MD5, SHA, AES, Base64, HMAC. Client-side crypto.","use":"API signature generation, data hashing, simple encryption for local storage","cdn":"https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js","tags":["Utility","Security"],"projects":[]},
+{"name":"Math.js","desc":"Extensive math library. Matrices, complex numbers, statistics, units, symbolic computation.","use":"ATLAS position sizing formulas, statistical calculations, unit conversions","cdn":"https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.2.1/math.min.js","tags":["Utility","Math","Science"],"projects":["ATLAS"]},
+{"name":"Zod","desc":"TypeScript-first schema validation with static type inference. Validate anything — API payloads, forms, env.","use":"Form validation in Studio OS, API contract validation, typed config","cdn":"https://cdn.jsdelivr.net/npm/zod@3.23.8/lib/index.umd.js","tags":["Utility","Validation","TS"],"projects":["STUDIO","SAGE"]},
+{"name":"Supabase JS","desc":"Client library for Supabase. Auth, database, storage, realtime, edge functions — all in one.","use":"Studio OS backend, MIRROR data store, auth for dashboards, realtime subscriptions","cdn":"https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.6/dist/umd/supabase.min.js","tags":["Utility","Backend","Realtime"],"projects":["STUDIO","MIRROR"]},
+{"name":"Stripe.js","desc":"Official Stripe SDK. Payment elements, checkout, subscriptions, tax, billing portal.","use":"Studio OS invoicing, Polypus client payments, subscription billing","cdn":"https://js.stripe.com/v3/","tags":["Utility","Payments"],"projects":["STUDIO"]}
+],
+"realtime":[
+{"name":"Socket.io","desc":"Real-time bidirectional event communication. Auto-reconnect, rooms, namespaces, broadcasting.","use":"Live dashboard updates, multi-user collaboration, real-time ticket alerts","cdn":"https://cdn.socket.io/4.7.5/socket.io.min.js","tags":["Realtime","WebSocket"],"projects":["SAGE","STUDIO"]},
+{"name":"Ably","desc":"Managed real-time messaging platform. Pub/sub, presence, history. Scales to millions of connections.","use":"SAGE live fleet dashboard, MIRROR real-time ad performance, live notifications","cdn":"https://cdn.ably.com/lib/ably.min-1.js","tags":["Realtime","Cloud","Managed"],"projects":["SAGE","MIRROR"]},
+{"name":"EventSource (SSE)","desc":"Native browser Server-Sent Events. One-directional server push. Perfect for streaming AI responses.","use":"Claude API streaming, live log streaming, real-time status updates","cdn":"","tags":["Realtime","Streaming","AI","Native"],"projects":["SAGE","STUDIO"]},
+{"name":"ReconnectingWebSocket","desc":"WebSocket wrapper that automatically reconnects on disconnect. Drop-in replacement.","use":"Any persistent WebSocket connection in dashboards, trading feeds","cdn":"https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js","tags":["Realtime","WebSocket"],"projects":["ATLAS","SAGE"]}
+]
+},
+"py":{
+"py-ai":[
+{"name":"anthropic","desc":"Official Claude API SDK. Messages, streaming, tools, vision, documents.","use":"Every AI feature we build. Primary LLM for all projects.","projects":["SAGE","MIRROR","ATLAS","STUDIO"]},
+{"name":"openai","desc":"OpenAI API SDK. GPT-4, Whisper (speech-to-text), DALL-E, embeddings.","use":"Fallback LLM, Whisper for audio transcription, embeddings comparison","projects":["SAGE"]},
+{"name":"google-generativeai","desc":"Google Gemini API. Multimodal, long context, grounding.","use":"Alternative LLM, document analysis with huge context window","projects":[]},
+{"name":"langchain","desc":"Framework for building LLM applications. Chains, agents, memory, tools.","use":"SAGE ticket intelligence pipeline, complex multi-step AI workflows","projects":["SAGE"]},
+{"name":"langchain-anthropic","desc":"LangChain integration for Claude. Use Claude inside any LangChain chain or agent.","use":"Claude as the brain of LangChain agents in SAGE","projects":["SAGE"]},
+{"name":"langgraph","desc":"Build stateful multi-agent workflows. Agents that loop, branch, and collaborate.","use":"SAGE multi-agent system, MIRROR research pipeline, autonomous workflows","projects":["SAGE","MIRROR"]},
+{"name":"llama-index","desc":"Framework for building RAG (Retrieval Augmented Generation) applications over your own data.","use":"SAGE ticket search — query 20 years of tickets with natural language","projects":["SAGE"]},
+{"name":"chromadb","desc":"Open-source vector database. Store and query embeddings locally. No cloud needed.","use":"SAGE knowledge base vector store, semantic ticket search","projects":["SAGE"]},
+{"name":"faiss-cpu","desc":"Facebook AI Similarity Search. Billion-scale vector similarity search. Extremely fast.","use":"Large-scale embedding search, finding similar tickets among 500k historical","projects":["SAGE"]},
+{"name":"sentence-transformers","desc":"State-of-the-art sentence embeddings. Convert text to vectors for semantic search.","use":"Convert SF-ICT ticket text to embeddings for similarity matching","projects":["SAGE"]},
+{"name":"transformers","desc":"HuggingFace. Access 100k+ pre-trained models. BERT, GPT, T5, Whisper, CLIP, and more.","use":"Custom NLP models, Dutch language models, specialized ticket classifiers","projects":["SAGE"]},
+{"name":"tiktoken","desc":"OpenAI tokenizer. Count tokens before sending to API to avoid errors and control costs.","use":"Cost estimation, chunking long documents, context window management","projects":["SAGE","MIRROR"]},
+{"name":"instructor","desc":"Get structured outputs from LLMs. Define Pydantic models, Claude returns typed data.","use":"Structured ticket classification, typed vendor data extraction, JSON responses","projects":["SAGE","MIRROR"]},
+{"name":"litellm","desc":"Call any LLM with the same API. Switch between Claude, GPT, Gemini, Mistral with one line.","use":"A/B test different models, fallback chains, provider-agnostic code","projects":["SAGE"]},
+{"name":"openai-whisper","desc":"OpenAI Whisper speech recognition. Transcribe audio in 99 languages, locally.","use":"Transcribe client calls, voicemail tickets, meeting recordings","projects":["SAGE"]},
+{"name":"elevenlabs","desc":"ElevenLabs text-to-speech SDK. Clone voices, generate natural speech.","use":"AI voiceovers for MIRROR video ads, SAGE voice alerts","projects":["MIRROR","SAGE"]},
+{"name":"deepgram-sdk","desc":"Speech recognition API. Real-time transcription, faster than Whisper, better accuracy.","use":"Real-time call transcription, live meeting notes, voice ticket creation","projects":["SAGE"]},
+{"name":"pinecone-client","desc":"Managed vector database. Cloud-hosted, scales to billions of vectors, production-ready.","use":"Production SAGE vector store when moving from local ChromaDB to cloud","projects":["SAGE"]},
+{"name":"ollama","desc":"Run Llama, Mistral, Qwen and others locally. Python client wraps the local Ollama server.","use":"Offline LLM for sensitive data, dev-time LLM without API costs","projects":["SAGE"]}
+],
+"py-data":[
+{"name":"pandas","desc":"The Python data analysis library. DataFrames, time series, groupby, merge, pivot, plot.","use":"Every data processing task. Ad data, ticket data, financial data, everything.","projects":["SAGE","MIRROR","ATLAS"]},
+{"name":"polars","desc":"Blazing fast DataFrame library. 5-10x faster than pandas. Lazy evaluation, parallel processing.","use":"Processing large ticket datasets (500k rows), performance-critical pipelines","projects":["SAGE"]},
+{"name":"numpy","desc":"Fundamental package for numerical computation. N-dimensional arrays, linear algebra, FFT.","use":"ML model inputs, numerical computations, array operations for ATLAS","projects":["ATLAS","SAGE"]},
+{"name":"scipy","desc":"Scientific computing. Statistics, signal processing, optimization, linear algebra.","use":"Statistical significance testing for AB tests, signal analysis for ATLAS","projects":["ATLAS","MIRROR"]},
+{"name":"scikit-learn","desc":"Machine learning in Python. Classification, regression, clustering, preprocessing, model selection.","use":"SAGE ticket classifier, ATLAS failure predictor, MIRROR customer segmentation","projects":["SAGE","ATLAS","MIRROR"]},
+{"name":"xgboost","desc":"Optimized gradient boosting. Often beats deep learning on tabular data. Kaggle winner.","use":"SAGE predictive failure model, MIRROR conversion prediction, churn prediction","projects":["SAGE","MIRROR"]},
+{"name":"lightgbm","desc":"Fast gradient boosting by Microsoft. Faster than XGBoost, handles categorical features.","use":"Alternative to XGBoost when training on large ticket datasets","projects":["SAGE"]},
+{"name":"torch","desc":"PyTorch. Deep learning framework. Neural networks, GPU acceleration, custom model training.","use":"Custom NLP model for Dutch tickets, time-series prediction for ATLAS","projects":["SAGE","ATLAS"]},
+{"name":"matplotlib","desc":"Comprehensive plotting library. Any type of chart, full control, publication quality.","use":"Data analysis visualizations, model performance plots, research charts","projects":["SAGE","ATLAS"]},
+{"name":"seaborn","desc":"Statistical visualization built on matplotlib. Beautiful by default. Heatmaps, distributions.","use":"Correlation heatmaps, distribution plots, statistical analysis charts","projects":["ATLAS"]},
+{"name":"plotly","desc":"Interactive Python charts. 40+ chart types, 3D, animated, export to HTML.","use":"Interactive analysis dashboards, Jupyter notebook visualizations","projects":["ATLAS"]},
+{"name":"statsmodels","desc":"Statistical models and tests. Time series analysis, regression, hypothesis testing.","use":"ATLAS time series analysis, ticket trend forecasting, statistical reporting","projects":["ATLAS","SAGE"]},
+{"name":"optuna","desc":"Hyperparameter optimization framework. AutoML. Find best model parameters automatically.","use":"Optimize ML models for SAGE and ATLAS without manual tuning","projects":["SAGE","ATLAS"]},
+{"name":"mlflow","desc":"ML lifecycle management. Track experiments, log metrics, version models, deploy.","use":"Track SAGE model experiments, compare model versions, production deployment","projects":["SAGE"]},
+{"name":"numba","desc":"JIT compiler for Python. Makes numeric Python code run at C speed.","use":"Speed up custom ATLAS strategy calculations, process large telemetry datasets","projects":["ATLAS"]},
+{"name":"pyarrow","desc":"Apache Arrow Python bindings. Fast columnar data format. Read/write Parquet files.","use":"High-performance data storage, interchange with databases and data warehouses","projects":["SAGE"]}
+],
+"py-web":[
+{"name":"requests","desc":"The simplest HTTP library for Python. GET, POST, sessions, auth, headers. The standard.","use":"Every API call in Python. Meta API, Shopify API, any REST API.","projects":["SAGE","MIRROR","ATLAS","STUDIO"]},
+{"name":"httpx","desc":"Modern HTTP client. Like requests but async-first, HTTP/2 support, better streaming.","use":"Async API calls in FastAPI, concurrent requests for faster scraping","projects":["SAGE","MIRROR"]},
+{"name":"aiohttp","desc":"Async HTTP client and server. Handles thousands of concurrent requests.","use":"High-volume scraping, concurrent API calls, real-time data feeds","projects":["MIRROR"]},
+{"name":"beautifulsoup4","desc":"HTML and XML parsing. Extract data from any web page. Works with requests.","use":"Scraping Meta Ad Library, AliExpress products, MSP vendor sites, NCSC bulletins","projects":["MIRROR","SAGE"]},
+{"name":"lxml","desc":"Fast C-based XML/HTML parser. 10x faster than Python parser for large documents.","use":"High-volume HTML scraping, XML feed processing, sitemap parsing","projects":["MIRROR"]},
+{"name":"playwright","desc":"Browser automation by Microsoft. Headless Chrome, Firefox, WebKit. JavaScript execution.","use":"Scrape JavaScript-rendered pages, automate Shopify, test web applications","projects":["MIRROR"]},
+{"name":"selenium","desc":"Browser automation. Older but more compatible. Works when Playwright is blocked.","use":"Legacy site automation, sites that detect headless browsers, form filling","projects":["MIRROR"]},
+{"name":"scrapy","desc":"Full web scraping framework. Spiders, pipelines, middleware, rate limiting, cloud deployment.","use":"Large-scale systematic scraping, structured crawls, production scraping jobs","projects":["MIRROR"]},
+{"name":"cloudscraper","desc":"Bypass Cloudflare protection. Drop-in replacement for requests that handles JS challenges.","use":"Scrape Cloudflare-protected sites, competitor intel, supplier data","projects":["MIRROR"]},
+{"name":"fake-useragent","desc":"Generates realistic browser user agents. Rotate to avoid bot detection.","use":"Stealth scraping, avoid rate limiting, appear as real browser","projects":["MIRROR"]},
+{"name":"curl-cffi","desc":"Python binding to curl-impersonate. Perfectly impersonates browser TLS fingerprints.","use":"Bypass sophisticated bot detection, scrape heavily protected sites","projects":["MIRROR"]},
+{"name":"selectolax","desc":"Blazing fast HTML parser based on Modest/Lexbor. 30x faster than BeautifulSoup.","use":"High-volume HTML parsing when speed is critical, processing millions of pages","projects":["MIRROR"]}
+],
+"py-backend":[
+{"name":"fastapi","desc":"Modern Python web framework. Automatic OpenAPI docs, type validation, async support.","use":"SAGE API server, MIRROR backend, any production API we build","projects":["SAGE","MIRROR","ATLAS","STUDIO"]},
+{"name":"uvicorn","desc":"Lightning-fast ASGI server. Runs FastAPI and Starlette applications.","use":"Production server for all FastAPI applications","projects":["SAGE","MIRROR","ATLAS","STUDIO"]},
+{"name":"pydantic","desc":"Data validation using Python type annotations. Define models, validate inputs automatically.","use":"API request/response models, configuration management, data contracts","projects":["SAGE","MIRROR","ATLAS","STUDIO"]},
+{"name":"sqlalchemy","desc":"Python SQL toolkit and ORM. Connect to PostgreSQL, MySQL, SQLite, any database.","use":"Database layer for SAGE ticket store, MIRROR data, ATLAS trade log","projects":["SAGE","MIRROR","ATLAS"]},
+{"name":"alembic","desc":"Database migration tool for SQLAlchemy. Version control for your database schema.","use":"Manage schema changes without losing data as systems evolve","projects":["SAGE","MIRROR","ATLAS"]},
+{"name":"psycopg2-binary","desc":"PostgreSQL adapter for Python. Fast, feature-complete, production-proven.","use":"Connect Python to PostgreSQL for all production databases","projects":["SAGE","MIRROR"]},
+{"name":"pymongo","desc":"Official MongoDB driver. Document databases, flexible schema, great for varied data.","use":"Store unstructured ticket data, ad creative metadata, client profiles","projects":["SAGE","MIRROR"]},
+{"name":"motor","desc":"Async MongoDB driver. Non-blocking MongoDB queries for FastAPI applications.","use":"Async database queries in FastAPI SAGE API server","projects":["SAGE"]},
+{"name":"redis","desc":"Redis Python client. Caching, sessions, pub/sub, queues, rate limiting.","use":"Cache AI responses, session storage, real-time event queuing","projects":["SAGE","MIRROR","STUDIO"]},
+{"name":"celery","desc":"Distributed task queue. Run background jobs, scheduled tasks, distributed processing.","use":"Background AI processing, scheduled scrapers, daily SAGE morning reports","projects":["SAGE","MIRROR"]},
+{"name":"apscheduler","desc":"Advanced Python scheduler. Cron, interval, date triggers. In-process scheduling.","use":"Daily Windows Update scan at 06:00, scheduled MIRROR scraper runs","projects":["SAGE","MIRROR"]},
+{"name":"websockets","desc":"Python WebSocket library. Build real-time bidirectional communication servers.","use":"Real-time SAGE dashboard updates, live fleet monitoring push","projects":["SAGE"]},
+{"name":"python-dotenv","desc":"Load environment variables from .env files. Keep secrets out of code.","use":"Every single project. API keys, database URLs, configuration.","projects":["SAGE","MIRROR","ATLAS","STUDIO"]},
+{"name":"loguru","desc":"Python logging made painless. Beautiful colored output, file rotation, structured logging.","use":"All application logging. Replace print() with proper logs in every project.","projects":["SAGE","MIRROR","ATLAS","STUDIO"]},
+{"name":"rich","desc":"Rich text and beautiful formatting in the terminal. Tables, progress bars, panels, markdown.","use":"Beautiful CLI output for scripts, progress display, development feedback","projects":["SAGE","MIRROR","ATLAS","STUDIO"]},
+{"name":"supabase","desc":"Official Supabase Python client. Auth, DB, storage, realtime — Python side of the Studio OS stack.","use":"Server-side Studio OS logic, MIRROR data ingestion into Supabase","projects":["STUDIO","MIRROR"]},
+{"name":"stripe","desc":"Official Stripe Python SDK. Customers, subscriptions, invoices, webhooks.","use":"Studio OS invoice generation, Polypus client payment automation","projects":["STUDIO"]}
+],
+"py-finance":[
+{"name":"MetaTrader5","desc":"Official MT5 Python integration. Real-time prices, order execution, account management.","use":"ATLAS: connect to IC Markets, get live prices, execute trades automatically","projects":["ATLAS"]},
+{"name":"yfinance","desc":"Download Yahoo Finance data. Historical prices, fundamentals, options, news for free.","use":"ATLAS backtesting data, market research, competitor financial analysis","projects":["ATLAS"]},
+{"name":"ccxt","desc":"Crypto trading library. Connect to 100+ exchanges with one unified API.","use":"ATLAS crypto trading on BTC, crypto exchange integration, CEX/DEX data","projects":["ATLAS"]},
+{"name":"pandas-ta","desc":"Technical analysis library for pandas. 130+ indicators — RSI, MACD, Bollinger, EMA.","use":"ATLAS strategy indicators, signal generation, trend analysis","projects":["ATLAS"]},
+{"name":"backtesting","desc":"Backtesting framework. Test strategies on historical data. Fast, Pythonic, Plotly charts.","use":"ATLAS strategy validation before live trading","projects":["ATLAS"]},
+{"name":"backtrader","desc":"Full-featured backtesting platform. Multiple data feeds, broker simulation, analyzers.","use":"ATLAS comprehensive strategy backtesting, walk-forward optimization","projects":["ATLAS"]},
+{"name":"quantstats","desc":"Portfolio performance analysis. Sharpe, drawdown, tearsheet, benchmarking, HTML reports.","use":"ATLAS performance reporting, prop firm challenge prep, strategy evaluation","projects":["ATLAS"]},
+{"name":"TA-Lib","desc":"Technical Analysis Library. C-based, extremely fast. 150+ indicators used by professionals.","use":"ATLAS production indicators — faster than pandas-ta for live trading","projects":["ATLAS"]},
+{"name":"alpaca-trade-api","desc":"Commission-free US stock trading API. Paper trading, live trading, market data.","use":"US stock trading for ATLAS expansion, paper trading environment","projects":["ATLAS"]},
+{"name":"finnhub-python","desc":"Finnhub market data API client. Stock quotes, news with sentiment, company fundamentals, crypto.","use":"ATLAS news sentiment layer — trade with sentiment signals","projects":["ATLAS"]}
+],
+"py-docs":[
+{"name":"python-docx","desc":"Create and modify Word documents. Paragraphs, tables, images, headers, styles.","use":"Auto-generate proposals, client reports, SF-ICT ticket summaries as Word docs","projects":["SAGE","STUDIO"]},
+{"name":"openpyxl","desc":"Read and write Excel files. Formatting, formulas, charts, pivot tables, images.","use":"Ad intelligence Excel export, financial reports, data delivery to non-technical clients","projects":["MIRROR","STUDIO","ATLAS"]},
+{"name":"xlsxwriter","desc":"Create Excel files with advanced formatting. Charts, conditional formatting, data validation.","use":"Professional Excel reports, formatted financial statements, color-coded outputs","projects":["STUDIO","ATLAS"]},
+{"name":"pdfplumber","desc":"Extract text, tables, and metadata from PDFs. Handles complex layouts.","use":"Extract data from client invoices, contracts, scanned documents, PSA exports","projects":["SAGE","STUDIO"]},
+{"name":"pymupdf","desc":"Fastest PDF library. Read, write, render PDFs. OCR support. 10x faster than PyPDF2.","use":"High-volume PDF processing, PDF rendering for comparison, annotation extraction","projects":["SAGE"]},
+{"name":"reportlab","desc":"Generate PDFs programmatically. Full control over layout, fonts, graphics, tables.","use":"Generate beautiful PDF proposals, invoices, client reports from Python","projects":["STUDIO"]},
+{"name":"python-pptx","desc":"Create and modify PowerPoint presentations. Slides, shapes, charts, images, themes.","use":"Auto-generate slide decks, client presentations, SAGE weekly report slides","projects":["SAGE","STUDIO"]},
+{"name":"pillow","desc":"Python Imaging Library. Open, manipulate, save images. Resize, crop, filter, draw.","use":"Image processing for ads, thumbnail generation, screenshot processing","projects":["MIRROR"]},
+{"name":"pytesseract","desc":"OCR — extract text from images. Powered by Google Tesseract. 100+ languages.","use":"Extract text from screenshots, process scanned tickets, read image-based invoices","projects":["SAGE"]},
+{"name":"easyocr","desc":"Ready-to-use OCR. Better accuracy than Tesseract. 80+ languages. GPU accelerated.","use":"High-accuracy text extraction from complex images and documents","projects":["SAGE"]},
+{"name":"rembg","desc":"Remove image backgrounds with AI. Clean cutouts from product photos and creatives.","use":"MIRROR ad creative cleanup, product photo backgrounds, isolated subjects","projects":["MIRROR"]},
+{"name":"weasyprint","desc":"Convert HTML + CSS to beautiful PDFs. Print-quality output, full CSS support.","use":"Generate branded client reports from HTML templates, invoice PDFs","projects":["STUDIO"]},
+{"name":"markdown","desc":"Pure Python Markdown-to-HTML converter. Extensions for tables, footnotes, code.","use":"Render documentation, static site generation, README-to-web","projects":["STUDIO"]}
+],
+"py-util":[
+{"name":"tqdm","desc":"Instant progress bars for Python loops. Essential for long-running scripts.","use":"Every data processing script, scraping progress, model training feedback","projects":["SAGE","MIRROR","ATLAS"]},
+{"name":"schedule","desc":"Job scheduling for humans. Run functions at intervals with cron-like syntax.","use":"Daily scrapers, hourly data refresh, weekly reports — simple in-process scheduling","projects":["SAGE","MIRROR"]},
+{"name":"watchdog","desc":"Monitor filesystem events. React when files change, are created, or deleted.","use":"Auto-reload configs, watch for new data files, hot-reload development tools","projects":[]},
+{"name":"psutil","desc":"Cross-platform system and process utilities. CPU, memory, disk, network monitoring.","use":"Monitor server health in SAGE, resource usage alerts, system diagnostics","projects":["SAGE"]},
+{"name":"paramiko","desc":"Python SSH2 protocol library. Connect to remote servers, execute commands, SFTP.","use":"Remote server management, automated deployments, data collection from remote systems","projects":["SAGE"]},
+{"name":"cryptography","desc":"Cryptographic primitives. AES encryption, RSA, TLS, certificates, password hashing.","use":"Encrypt sensitive data at rest, API key protection, secure credential storage","projects":["SAGE","STUDIO"]},
+{"name":"pycountry","desc":"ISO country, language, currency data. Convert between codes and names.","use":"Process geo data from Meta Ads, validate client country data, multi-language systems","projects":["MIRROR"]},
+{"name":"phonenumbers","desc":"Parse, format, validate international phone numbers (Google libphonenumber).","use":"Client contact data validation, CRM cleanup, international number formatting","projects":["STUDIO","SAGE"]},
+{"name":"validators","desc":"Simple data validation. URLs, emails, IP addresses, UUIDs, cards — one function each.","use":"Input validation in APIs, data cleaning, form validation backend","projects":["STUDIO"]},
+{"name":"humanize","desc":"Turn numbers and dates into human-readable strings. 3 days ago, 1.2 million.","use":"Dashboard display text, notification messages, report summaries","projects":["SAGE","STUDIO"]},
+{"name":"arrow","desc":"Better dates for Python. Timezone-aware, human-friendly, inspired by moment.js.","use":"Timezone handling for Dutch/Swiss operations, clean date formatting","projects":["SAGE","STUDIO"]},
+{"name":"faker","desc":"Generate fake data. Names, addresses, emails, companies, phone numbers, credit cards.","use":"Test data generation, demo data for presentations, development without real data","projects":["SAGE","MIRROR","STUDIO"]},
+{"name":"black","desc":"The uncompromising Python code formatter. Auto-format all Python code to one style.","use":"Keep all Python code consistently formatted. Run before every commit.","projects":["SAGE","MIRROR","ATLAS","STUDIO"]},
+{"name":"pytest","desc":"The standard Python testing framework. Fixtures, parameterize, plugins, coverage.","use":"Test all Python code. Unit tests, integration tests, API tests.","projects":["SAGE","MIRROR","ATLAS","STUDIO"]},
+{"name":"typer","desc":"Build CLI applications with Python type hints. Automatic --help, argument parsing.","use":"Build CLI tools for SAGE administration, MIRROR automation scripts","projects":["SAGE","MIRROR"]},
+{"name":"pyfiglet","desc":"ASCII art text. Print large stylized text in the terminal.","use":"Script banners, terminal dashboards, visually identify script outputs","projects":[]},
+{"name":"qrcode","desc":"Generate QR codes as PNG or SVG from any data string.","use":"Share links, mobile handoff, product QR codes, contact card generation","projects":["STUDIO"]}
+]
+}
+}
+</script>
+
 <script>
 // ═══════════════════════════════════════════════════════
-//  MASTER LIBRARY DATABASE
+//  PARSE DATA
 // ═══════════════════════════════════════════════════════
+const DATA = JSON.parse(document.getElementById('devkit-data').textContent);
+const JS_LIBS = DATA.js;
+const PY_PKGS = DATA.py;
 
-const JS_LIBS = {
-
-animation: [
-  { name:'GSAP', desc:'The gold standard for web animation. Timelines, scroll triggers, morphing, text effects. Used by Apple, Google, NASA.', use:'Slide transitions, number reveals, hero animations, scroll-driven UIs', cdn:'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.3/gsap.min.js', tags:['Animation','Pro'] },
-  { name:'GSAP ScrollTrigger', desc:'GSAP plugin. Trigger any animation based on scroll position. Scrub, pin, snap.', use:'Scroll-based storytelling, parallax dashboards, on-scroll reveals', cdn:'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.3/ScrollTrigger.min.js', tags:['Animation','Scroll'] },
-  { name:'GSAP TextPlugin', desc:'GSAP plugin. Type text character by character with full easing control.', use:'AI typing effect, terminal output simulation, live feed text', cdn:'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.3/TextPlugin.min.js', tags:['Animation','Text'] },
-  { name:'Anime.js', desc:'Lightweight alternative to GSAP. CSS, SVG, DOM and JS object animations. Great for simple UI motion.', use:'Icon bounce effects, loading states, card entrances', cdn:'https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js', tags:['Animation'] },
-  { name:'Lottie Web', desc:'Render After Effects animations exported as JSON. 500k+ free animations on LottieFiles.', use:'Loading spinners, success checkmarks, empty states, onboarding illustrations', cdn:'https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js', tags:['Animation','Design'] },
-  { name:'Typed.js', desc:'Typewriter effect library. Types and deletes strings with configurable speed and cursor.', use:'Hero section headlines, AI response simulation, terminal demos', cdn:'https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.16/typed.umd.js', tags:['Animation','Text'] },
-  { name:'AOS', desc:'Animate On Scroll. Add data-aos attributes to any element for scroll-triggered entrance animations.', use:'Landing page sections, feature reveals, statistics counters on scroll', cdn:'https://unpkg.com/aos@2.3.1/dist/aos.js', tags:['Animation','Scroll'] },
-  { name:'Rellax', desc:'Buttery smooth parallax scrolling. Any element scrolls at a different speed creating depth.', use:'Hero backgrounds, decorative elements, pitch deck depth effects', cdn:'https://cdnjs.cloudflare.com/ajax/libs/rellax/1.12.1/rellax.min.js', tags:['Animation','Scroll'] },
-  { name:'CountUp.js', desc:'Animated number counters. Smooth count from 0 to any number with easing, decimals, prefix, suffix.', use:'Dashboard KPI reveals, stats sections, ROAS counters, live metrics', cdn:'https://cdnjs.cloudflare.com/ajax/libs/CountUp.js/2.8.0/countUp.umd.js', tags:['Animation','Numbers'] },
-  { name:'Velocity.js', desc:'Fast DOM animation engine. jQuery-compatible API but much faster. Hardware accelerated.', use:'Complex multi-step UI animations, legacy project upgrades', cdn:'https://cdnjs.cloudflare.com/ajax/libs/velocity/2.0.6/velocity.min.js', tags:['Animation'] },
-  { name:'Motion One', desc:'Modern animation library built on the Web Animations API. Tiny and incredibly fast.', use:'Micro-interactions, gesture-driven UI, React/Vue animations', cdn:'https://cdn.jsdelivr.net/npm/motion@10.16.4/dist/motion.js', tags:['Animation','Modern'] },
-  { name:'Popmotion', desc:'Functional animation library. Spring physics, decay, keyframe animations. Powers Framer Motion.', use:'Physics-based UI, chat bubble springs, drag interactions', cdn:'https://unpkg.com/popmotion/dist/popmotion.global.min.js', tags:['Animation','Physics'] },
-],
-
-charts: [
-  { name:'Chart.js', desc:'The most popular charting library. 8 chart types, all animated, easy API. Perfect for standard dashboards.', use:'Bar charts, line charts, doughnut charts in all dashboards', cdn:'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js', tags:['Charts','Simple'] },
-  { name:'ApexCharts', desc:'Advanced charts with real-time updates, zoom, pan, candlestick, heatmap, treemap. Better than Chart.js for complex data.', use:'ATLAS trading charts, MIRROR AB testing, SAGE ticket heatmaps', cdn:'https://cdn.jsdelivr.net/npm/apexcharts', tags:['Charts','Advanced','Realtime'] },
-  { name:'D3.js', desc:'The most powerful data visualization library ever built. Unlimited custom visualizations using SVG and Canvas.', use:'Network graphs, force-directed layouts, geographic choropleth, custom viz', cdn:'https://d3js.org/d3.v7.min.js', tags:['Charts','Custom','Advanced'] },
-  { name:'ECharts', desc:'Apache ECharts. Extremely powerful, handles millions of data points. Better performance than D3 for large datasets.', use:'Fleet monitoring dashboards, real-time telemetry, 3D bar charts', cdn:'https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js', tags:['Charts','Performance','3D'] },
-  { name:'Plotly.js', desc:'Interactive scientific charts. Box plots, violin, contour, 3D scatter, geo maps. Used by data scientists.', use:'ATLAS strategy analysis, ML model outputs, statistical reporting', cdn:'https://cdn.plot.ly/plotly-2.26.0.min.js', tags:['Charts','Scientific','3D'] },
-  { name:'Frappe Charts', desc:'GitHub-style charts. Beautiful heatmaps, percentage bars, line and bar. Zero config, just data in.', use:'Ticket frequency calendars, commit-style activity grids, sprint burndown', cdn:'https://cdn.jsdelivr.net/npm/frappe-charts@1.6.2/dist/frappe-charts.min.umd.js', tags:['Charts','Simple'] },
-  { name:'uPlot', desc:'Insanely fast lightweight chart library. Renders 100k+ data points smoothly. For live time-series.', use:'ATLAS real-time price charts, endpoint telemetry streams, log graphs', cdn:'https://cdn.jsdelivr.net/npm/uplot@1.6.31/dist/uPlot.iife.min.js', tags:['Charts','Performance','Realtime'] },
-  { name:'ProgressBar.js', desc:'Animated SVG progress bars and circles. Fully configurable colors, stroke, easing, text.', use:'Endpoint health rings, campaign budget gauges, sprint progress circles', cdn:'https://cdn.jsdelivr.net/npm/progressbar.js@1.1.0/dist/progressbar.min.js', tags:['Charts','UI'] },
-  { name:'Gauge.js', desc:'Beautiful animated gauge charts. Like a speedometer. Perfect for single KPI display.', use:'ROAS gauge, FCR rate, endpoint health score, ATLAS win rate', cdn:'https://cdn.jsdelivr.net/npm/gauge.js@1.3.7/dist/gauge.min.js', tags:['Charts','KPI'] },
-  { name:'wordcloud2.js', desc:'Generates word clouds in Canvas. Size words by frequency. Beautiful for text analysis.', use:'Ticket keyword clouds, competitor ad copy analysis, client request themes', cdn:'https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/src/wordcloud2.js', tags:['Charts','Text'] },
-  { name:'Billboard.js', desc:'D3-based chart library with simpler API. NVD3 successor. Great middle ground between Chart.js and D3.', use:'Complex multi-series line charts, combination charts, grouped bars', cdn:'https://cdn.jsdelivr.net/npm/billboard.js/dist/billboard.min.js', tags:['Charts'] },
-],
-
-'3d': [
-  { name:'Three.js', desc:'The standard WebGL library. Build full 3D scenes, models, lighting, cameras, shaders. Massive ecosystem.', use:'Agent office 3D environment, 3D data globe, hero background scenes', cdn:'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js', tags:['3D','WebGL'] },
-  { name:'Babylon.js', desc:'Full 3D game engine in the browser. Physics, collisions, shadows, VR/AR support. More complete than Three.js.', use:'Interactive product demos, 3D client environment maps, immersive dashboards', cdn:'https://cdn.babylonjs.com/babylon.js', tags:['3D','WebGL','Engine'] },
-  { name:'PixiJS', desc:'2D WebGL renderer. Insanely fast 2D sprites, particles, filters. Best for 2D canvas performance.', use:'Real-time data visualizations, animated dashboards, particle systems', cdn:'https://cdn.jsdelivr.net/npm/pixi.js@7.3.2/dist/pixi.min.js', tags:['2D','WebGL','Performance'] },
-  { name:'Fabric.js', desc:'HTML5 Canvas made easy. Draw, drag, scale, rotate objects. Full canvas interactivity.', use:'Image editor, whiteboard tools, ad creative builder, diagram editor', cdn:'https://cdn.jsdelivr.net/npm/fabric@5.3.0/dist/fabric.min.js', tags:['Canvas','2D'] },
-  { name:'Konva.js', desc:'2D Canvas framework for desktop and mobile. Layers, events, drag and drop, animations.', use:'Interactive network diagrams, floor plans, node-based editors', cdn:'https://unpkg.com/konva@9/konva.min.js', tags:['Canvas','2D','Interactive'] },
-  { name:'Rough.js', desc:'Creates graphics that look hand-drawn. Sketchy aesthetic for any shape or path.', use:'Wireframe-style prototypes, playful dashboards, design assets', cdn:'https://unpkg.com/roughjs@4.6.6/bundled/rough.js', tags:['Canvas','Design'] },
-  { name:'Zdog', desc:'Flat, round, designer-friendly pseudo-3D engine. Beautiful 3D illustrations with minimal code.', use:'Logo animations, icon 3D effects, decorative UI elements', cdn:'https://unpkg.com/zdog@1/zdog.dist.min.js', tags:['3D','Design'] },
-  { name:'Particles.js', desc:'Configurable particle and network backgrounds. Connect dots, repel on hover, custom shapes.', use:'Hero sections, cover slides, loading screens, ambient UI backgrounds', cdn:'https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js', tags:['3D','Background'] },
-  { name:'tsParticles', desc:'Evolved particles.js. More shapes, connections, polygon masks, fireworks, confetti, snow.', use:'Celebration animations, dynamic backgrounds, interactive hero sections', cdn:'https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js', tags:['3D','Background','Interactive'] },
-  { name:'Matter.js', desc:'2D physics engine. Rigid bodies, collision detection, gravity, constraints, composites.', use:'Interactive UI physics, bouncing elements, game mechanics', cdn:'https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js', tags:['Physics','2D'] },
-],
-
-ui: [
-  { name:'Tailwind CSS', desc:'Utility-first CSS. Build any design without leaving HTML. 10x faster than custom CSS. Must-have.', use:'Every single project. Replaces custom CSS almost entirely.', cdn:'https://cdn.tailwindcss.com', tags:['CSS','Framework','Essential'] },
-  { name:'Alpine.js', desc:'Lightweight reactivity in HTML attributes. No build step. Replaces jQuery for simple interactivity.', use:'Dropdowns, tabs, modals, toggles, state management without React', cdn:'https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js', tags:['JS','Reactivity'] },
-  { name:'Lucide Icons', desc:'1,400+ consistent, clean SVG icons. Each icon is identical stroke width and style.', use:'Replace all emoji in dashboards. Navigation, status, actions, categories.', cdn:'https://unpkg.com/lucide@latest/dist/umd/lucide.js', tags:['Icons','Essential'] },
-  { name:'Heroicons', desc:'Beautiful hand-crafted SVG icons by Tailwind team. Outline and solid variants.', use:'Tailwind-native icon set for all Tailwind projects', cdn:'https://unpkg.com/heroicons@2.0.18/24/outline/index.js', tags:['Icons'] },
-  { name:'Phosphor Icons', desc:'Flexible icon family. 6 weights per icon — thin, light, regular, bold, fill, duotone. 1,200+ icons.', use:'Rich UI with multiple icon weights, design-heavy interfaces', cdn:'https://unpkg.com/@phosphor-icons/web', tags:['Icons','Design'] },
-  { name:'Tippy.js', desc:'Complete tooltip and popover solution. Hover, click, focus triggers. Animated, themeable, custom HTML.', use:'Help tooltips on every dashboard, data previews, context menus', cdn:'https://unpkg.com/tippy.js@6', tags:['UI','Tooltip'] },
-  { name:'SweetAlert2', desc:'Beautiful replacement for browser alerts. Modals with custom buttons, inputs, timers, icons.', use:'Confirmation dialogs, delete confirmations, success messages, input prompts', cdn:'https://cdn.jsdelivr.net/npm/sweetalert2@11', tags:['UI','Modal'] },
-  { name:'Notyf', desc:'Elegant minimal toast notifications. Success, error, custom. 1.7kb gzipped.', use:'Agent status updates, save confirmations, error alerts in all dashboards', cdn:'https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js', tags:['UI','Notification'] },
-  { name:'Toastify', desc:'Simple, flexible JavaScript toasts. Offset, duration, close button, custom class.', use:'Lightweight toast alternative when Notyf is too styled', cdn:'https://cdn.jsdelivr.net/npm/toastify-js', tags:['UI','Notification'] },
-  { name:'Flatpickr', desc:'Powerful, lightweight datetime picker. Range, time, multiple, disable dates. Zero dependencies.', use:'Report date ranges, schedule pickers, campaign date filters', cdn:'https://cdn.jsdelivr.net/npm/flatpickr', tags:['UI','Input','Dates'] },
-  { name:'Choices.js', desc:'Replacements for select inputs. Search, multi-select, custom rendering, tag input.', use:'Multi-client selectors, tag systems, product category filters', cdn:'https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js', tags:['UI','Input','Select'] },
-  { name:'IMask.js', desc:'Input masking. Phone numbers, dates, credit cards, custom patterns. Format as you type.', use:'Phone inputs, date entry, custom ID formats, currency inputs', cdn:'https://unpkg.com/imask', tags:['UI','Input','Format'] },
-  { name:'Cleave.js', desc:'Format input text as you type. Credit card, phone, date, numeral, custom delimiters.', use:'Payment forms, phone number inputs, structured ID entry', cdn:'https://cdn.jsdelivr.net/npm/cleave.js@1.6.0/dist/cleave.min.js', tags:['UI','Input','Format'] },
-  { name:'SortableJS', desc:'Drag and drop for any list or grid. Reorder, move between lists, touch support, animations.', use:'Kanban boards, priority lists, column reordering, playlist builders', cdn:'https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js', tags:['UI','Drag&Drop'] },
-  { name:'interact.js', desc:'Drag, resize, multi-touch gestures. More powerful than SortableJS. Full gesture control.', use:'Resizable dashboard panels, custom canvas interactions, drag-to-connect', cdn:'https://cdn.jsdelivr.net/npm/interact.js/dist/interact.min.js', tags:['UI','Drag&Drop','Gestures'] },
-  { name:'Quill', desc:'Rich text editor. Bold, italic, lists, code blocks, images, videos, custom formats.', use:'Email composer, proposal editor, knowledge base editor, ticket notes', cdn:'https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.js', tags:['UI','Editor'] },
-  { name:'CodeMirror', desc:'The best in-browser code editor. 100+ language modes, themes, autocomplete, linting.', use:'Code editor in SAGE, PowerShell script builder, SQL query editor', cdn:'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js', tags:['UI','Editor','Code'] },
-  { name:'Highlight.js', desc:'Syntax highlighting for 190+ languages. Detect language automatically. 230+ themes.', use:'Code display everywhere, SAGE script viewer, API documentation', cdn:'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js', tags:['UI','Code','Syntax'] },
-  { name:'Prism.js', desc:'Lightweight syntax highlighter. Cleaner output than Highlight.js. Better for documentation sites.', use:'Documentation display, tutorial code blocks, spec sheets', cdn:'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js', tags:['UI','Code','Syntax'] },
-  { name:'DataTables', desc:'jQuery plugin for interactive HTML tables. Sort, search, paginate, export. Enterprise-grade.', use:'Large data tables in dashboards, exportable reports, PSA ticket lists', cdn:'https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js', tags:['UI','Tables','Data'] },
-  { name:'Grid.js', desc:'Advanced JavaScript table component. Works with any framework. Sort, search, pagination, async.', use:'Client lists, ticket tables, product inventory, vendor comparison tables', cdn:'https://unpkg.com/gridjs/dist/gridjs.umd.js', tags:['UI','Tables'] },
-  { name:'Tabulator', desc:'Feature-rich table library. Editable cells, row grouping, tree data, column calculations.', use:'Editable dashboards, live-updating data grids, financial tables', cdn:'https://unpkg.com/tabulator-tables@5.5.4/dist/js/tabulator.min.js', tags:['UI','Tables','Advanced'] },
-  { name:'Vanilla Tilt', desc:'GPU-accelerated 3D tilt hover effect on cards. Makes interfaces feel premium and tactile.', use:'Pitch deck cards, portfolio items, feature cards, landing pages', cdn:'https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js', tags:['UI','Effect'] },
-  { name:'Lenis', desc:'Smooth scroll library. Butter-smooth momentum scrolling on any page.', use:'Pitch decks, marketing pages, scroll-driven storytelling', cdn:'https://unpkg.com/@studio-freight/lenis/bundled/lenis.js', tags:['UI','Scroll'] },
-  { name:'GLightbox', desc:'Beautiful lightbox gallery. Images, videos, iframes, custom HTML. Touch, keyboard, zoom support.', use:'Image galleries, video demos, competitor ad image viewer', cdn:'https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js', tags:['UI','Gallery'] },
-  { name:'PhotoSwipe', desc:'Mobile-friendly image gallery and lightbox. Zoom, swipe, touch, keyboard navigation.', use:'Ad creative gallery, product image viewer, competitor ad library', cdn:'https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.3.8/umd/photoswipe.umd.min.js', tags:['UI','Gallery'] },
-  { name:'Cropper.js', desc:'JavaScript image cropping. Zoom, rotate, scale, flip. Output as canvas, blob, or base64.', use:'Profile photo upload, ad creative cropping, image preprocessing', cdn:'https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js', tags:['UI','Image'] },
-  { name:'Marked', desc:'Markdown to HTML. Blazing fast. Parse Claude AI responses into properly formatted HTML.', use:'AI chat responses, documentation rendering, proposal preview, README display', cdn:'https://cdn.jsdelivr.net/npm/marked/marked.min.js', tags:['Utility','Text','AI'] },
-  { name:'DOMPurify', desc:'XSS sanitizer. Cleans HTML before injecting. Essential when rendering user or AI-generated content.', use:'Security layer for all innerHTML from API responses, AI output, user input', cdn:'https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.8/purify.min.js', tags:['Utility','Security','Essential'] },
-  { name:'QRCode.js', desc:'Generate QR codes in the browser. Canvas or SVG output. Customizable size and color.', use:'Link sharing, mobile handoff, product pages, contact cards', cdn:'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js', tags:['UI','QR'] },
-  { name:'jsPDF', desc:'Generate PDF documents entirely in JavaScript. Text, images, tables, shapes, custom fonts.', use:'Proposal generator, report export, invoice builder, pitch PDF export', cdn:'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js', tags:['UI','PDF','Export'] },
-  { name:'html2canvas', desc:'Screenshot any DOM element as a canvas. Combine with jsPDF for HTML-to-PDF.', use:'Dashboard screenshot export, PDF report generation, share card creation', cdn:'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js', tags:['UI','PDF','Export'] },
-  { name:'SheetJS', desc:'Read and write Excel files in the browser. Parse .xlsx, .csv, export data grids.', use:'Export dashboards to Excel, import client data, bulk data processing', cdn:'https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js', tags:['UI','Excel','Export'] },
-  { name:'Micromodal', desc:'Tiny accessible modal library. 1.9kb, WAI-ARIA compliant, keyboard navigation.', use:'Lightweight modals where SweetAlert2 is overkill', cdn:'https://unpkg.com/micromodal/dist/micromodal.min.js', tags:['UI','Modal'] },
-  { name:'KaTeX', desc:'Fast math typesetting. Renders LaTeX math notation beautifully in the browser.', use:'ATLAS strategy formulas, statistical reports, ML model documentation', cdn:'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js', tags:['UI','Math','Science'] },
-],
-
-maps: [
-  { name:'Leaflet', desc:'The leading open-source interactive map library. Lightweight, mobile-friendly, huge plugin ecosystem.', use:'Client location maps, delivery tracking, geo-targeted ad regions', cdn:'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js', tags:['Maps','Open Source'] },
-  { name:'OpenLayers', desc:'Full-featured web mapping. WMS, vector tiles, raster, WebGL. More powerful than Leaflet.', use:'Complex geographic analysis, multi-layer maps, GIS integration', cdn:'https://cdn.jsdelivr.net/npm/ol/dist/ol.js', tags:['Maps','Advanced'] },
-  { name:'Mapbox GL JS', desc:'WebGL-powered vector maps. Smooth zoom, 3D terrain, custom styles, data layers. Best-looking maps.', use:'SF-ICT client map, MIRROR geo targeting, premium client-facing maps', cdn:'https://api.mapbox.com/mapbox-gl-js/v3.0.0/mapbox-gl.js', tags:['Maps','3D','Premium'] },
-  { name:'Deck.gl', desc:'WebGL-powered large-scale data visualization on maps. Handle millions of data points.', use:'Fleet endpoint map with real-time updates, delivery density maps', cdn:'https://unpkg.com/deck.gl@8.9.35/dist.min.js', tags:['Maps','DataViz','Performance'] },
-],
-
-media: [
-  { name:'Howler.js', desc:'Audio library for the modern web. Web Audio API and HTML5 Audio. Spatial audio, sprites, streaming.', use:'Sound effects in dashboards, alert sounds, audio feedback', cdn:'https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js', tags:['Audio'] },
-  { name:'Tone.js', desc:'Web Audio framework for creating interactive music and sound effects. Synthesizers, effects, sequencers.', use:'Custom alert tones, audio visualizations, experimental UI sound design', cdn:'https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js', tags:['Audio','Music'] },
-  { name:'Wavesurfer.js', desc:'Navigable waveform visualization. Play, pause, seek, zoom. Regions, markers, plugins.', use:'Call recording playback, audio file analysis, voiceover preview', cdn:'https://unpkg.com/wavesurfer.js@7/dist/wavesurfer.esm.js', tags:['Audio','Visualization'] },
-  { name:'Video.js', desc:'The web video player. HTML5 video, HLS, DASH, DRM. Plugins for everything. 400k sites use it.', use:'Tutorial videos, product demos, ad creative preview, client presentations', cdn:'https://vjs.zencdn.net/8.6.1/video.min.js', tags:['Video','Player'] },
-  { name:'Plyr', desc:'Clean, accessible, customizable HTML5 media player. Video, audio, YouTube, Vimeo support.', use:'Embedded video players, training content, ad video preview', cdn:'https://cdn.plyr.io/3.7.8/plyr.js', tags:['Video','Player'] },
-  { name:'MediaPipe', desc:'Google\'s ML solutions for media. Hand tracking, face detection, pose estimation, object detection.', use:'Gesture-controlled interfaces, video AI analysis, AR experiments', cdn:'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0', tags:['Video','AI','ML'] },
-],
-
-utility: [
-  { name:'Axios', desc:'The best HTTP client. Interceptors, automatic JSON, request cancellation, CSRF protection.', use:'Every single API call — Claude API, Meta API, Shopify, all external services', cdn:'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js', tags:['HTTP','Essential'] },
-  { name:'Lodash', desc:'200+ utility functions for JS. Arrays, objects, strings, numbers, functions. Prevents wheel reinvention.', use:'Data manipulation, debouncing, deep cloning, array grouping, transformations', cdn:'https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js', tags:['Utility','Data','Essential'] },
-  { name:'Day.js', desc:'2kb Moment.js alternative. Parse, validate, manipulate, display dates and times.', use:'Ticket timestamps, ad run duration, reporting periods, relative time display', cdn:'https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js', tags:['Utility','Dates'] },
-  { name:'date-fns', desc:'Modular date utility library. Only import what you need. 200+ functions, immutable, pure.', use:'Complex date calculations, timezone handling, business day logic', cdn:'https://cdn.jsdelivr.net/npm/date-fns@2.30.0/cdn.min.js', tags:['Utility','Dates'] },
-  { name:'UUID', desc:'Generate RFC4122 UUIDs. V1 (timestamp), V4 (random), V5 (namespace). Unique ID generation.', use:'Unique IDs for tickets, sessions, database records, API keys', cdn:'https://cdn.jsdelivr.net/npm/uuid@9.0.0/dist/umd/uuidv4.min.js', tags:['Utility','ID'] },
-  { name:'Fuse.js', desc:'Lightweight fuzzy search. Client-side search with scoring, threshold, weighting. No server needed.', use:'Dashboard search bars, library search (like this one!), product finder', cdn:'https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js', tags:['Utility','Search'] },
-  { name:'Chroma.js', desc:'Color manipulation library. Convert, mix, scale, generate color palettes from any color space.', use:'Dynamic theming, heatmap color scales, data visualization color generation', cdn:'https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js', tags:['Utility','Colors','Design'] },
-  { name:'FileSaver.js', desc:'Client-side file saving. Download any Blob, File, or data URL with a filename.', use:'Export dashboards to file, download generated PDFs, save canvas images', cdn:'https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js', tags:['Utility','Files','Export'] },
-  { name:'PapaParse', desc:'The best CSV parser for JavaScript. Streaming, Web Workers, auto-detect delimiter.', use:'Import ad data, client lists, financial exports, bulk product uploads', cdn:'https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js', tags:['Utility','CSV','Data'] },
-  { name:'JSZip', desc:'Create, read, edit ZIP files in JavaScript. Compress multiple files client-side.', use:'Bulk export, project download packages, multi-file deliverables', cdn:'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js', tags:['Utility','Files','Compression'] },
-  { name:'Clipboard.js', desc:'Modern clipboard access. Copy text or HTML to clipboard without Flash. 3kb.', use:'Copy CDN links, copy code snippets, copy API keys, one-click share', cdn:'https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js', tags:['Utility','UX'] },
-  { name:'Crypto-JS', desc:'Cryptographic algorithms in JavaScript. MD5, SHA, AES, Base64, HMAC. Client-side crypto.', use:'API signature generation, data hashing, simple encryption for local storage', cdn:'https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js', tags:['Utility','Security'] },
-  { name:'Math.js', desc:'Extensive math library. Matrices, complex numbers, statistics, units, symbolic computation.', use:'ATLAS position sizing formulas, statistical calculations, unit conversions', cdn:'https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.2.1/math.min.js', tags:['Utility','Math','Science'] },
-  { name:'Marked', desc:'Markdown to HTML renderer. Blazing fast. Renders Claude AI responses with formatting.', use:'AI chat interfaces, documentation rendering, proposal preview', cdn:'https://cdn.jsdelivr.net/npm/marked/marked.min.js', tags:['Utility','Text','AI'] },
-],
-
-realtime: [
-  { name:'Socket.io', desc:'Real-time bidirectional event communication. Auto-reconnect, rooms, namespaces, broadcasting.', use:'Live dashboard updates, multi-user collaboration, real-time ticket alerts', cdn:'https://cdn.socket.io/4.7.2/socket.io.min.js', tags:['Realtime','WebSocket'] },
-  { name:'Ably', desc:'Managed real-time messaging platform. Pub/sub, presence, history. Scales to millions of connections.', use:'SAGE live fleet dashboard, MIRROR real-time ad performance, live notifications', cdn:'https://cdn.ably.com/lib/ably.min-1.js', tags:['Realtime','Cloud','Managed'] },
-  { name:'EventSource', desc:'Native browser Server-Sent Events. One-directional server push. Perfect for streaming AI responses.', use:'Claude API streaming, live log streaming, real-time status updates', cdn:'Native browser API — no CDN needed', tags:['Realtime','Streaming','AI'] },
-  { name:'ReconnectingWebSocket', desc:'WebSocket wrapper that automatically reconnects on disconnect. Drop-in replacement.', use:'Any persistent WebSocket connection in dashboards, trading feeds', cdn:'https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js', tags:['Realtime','WebSocket'] },
-],
-
+const CAT_LABELS = {
+  animation:'Animation', charts:'Charts & Dataviz', '3d':'3D & Canvas',
+  ui:'UI Components', maps:'Maps & Geo', media:'Audio & Video',
+  utility:'Utilities', realtime:'Realtime',
+  'py-ai':'AI & LLM', 'py-data':'Data & ML', 'py-web':'Scraping & Web',
+  'py-backend':'Backend & APIs', 'py-finance':'Finance & Trading',
+  'py-docs':'Documents', 'py-util':'Python Utils'
 };
-
-// ═══════════════════════════════════════════════════════
-//  PYTHON PACKAGES DATABASE
-// ═══════════════════════════════════════════════════════
-
-const PY_PKGS = {
-
-'py-ai': [
-  { name:'anthropic', desc:'Official Claude API SDK. Messages, streaming, tools, vision, documents.', use:'Every AI feature we build. Primary LLM for all projects.' },
-  { name:'openai', desc:'OpenAI API SDK. GPT-4, Whisper (speech-to-text), DALL-E, embeddings.', use:'Fallback LLM, Whisper for audio transcription, embeddings comparison' },
-  { name:'google-generativeai', desc:'Google Gemini API. Multimodal, long context, grounding.', use:'Alternative LLM, document analysis with huge context window' },
-  { name:'langchain', desc:'Framework for building LLM applications. Chains, agents, memory, tools.', use:'SAGE ticket intelligence pipeline, complex multi-step AI workflows' },
-  { name:'langchain-anthropic', desc:'LangChain integration for Claude. Use Claude inside any LangChain chain or agent.', use:'Claude as the brain of LangChain agents in SAGE' },
-  { name:'langgraph', desc:'Build stateful multi-agent workflows. Agents that loop, branch, and collaborate.', use:'SAGE multi-agent system, MIRROR research pipeline, autonomous workflows' },
-  { name:'llama-index', desc:'Framework for building RAG (Retrieval Augmented Generation) applications over your own data.', use:'SAGE ticket search — query 20 years of tickets with natural language' },
-  { name:'chromadb', desc:'Open-source vector database. Store and query embeddings locally. No cloud needed.', use:'SAGE knowledge base vector store, semantic ticket search' },
-  { name:'faiss-cpu', desc:'Facebook AI Similarity Search. Billion-scale vector similarity search. Extremely fast.', use:'Large-scale embedding search, finding similar tickets among 500k historical' },
-  { name:'sentence-transformers', desc:'State-of-the-art sentence embeddings. Convert text to vectors for semantic search.', use:'Convert SF-ICT ticket text to embeddings for similarity matching' },
-  { name:'transformers', desc:'HuggingFace. Access 100k+ pre-trained models. BERT, GPT, T5, Whisper, CLIP, and more.', use:'Custom NLP models, Dutch language models, specialized ticket classifiers' },
-  { name:'tiktoken', desc:'OpenAI\'s tokenizer. Count tokens before sending to API to avoid errors and control costs.', use:'Cost estimation, chunking long documents, context window management' },
-  { name:'instructor', desc:'Get structured outputs from LLMs. Define Pydantic models, Claude returns typed data.', use:'Structured ticket classification, typed vendor data extraction, JSON responses' },
-  { name:'litellm', desc:'Call any LLM with the same API. Switch between Claude, GPT, Gemini, Mistral with one line.', use:'A/B test different models, fallback chains, provider-agnostic code' },
-  { name:'openai-whisper', desc:'OpenAI Whisper speech recognition. Transcribe audio in 99 languages, locally.', use:'Transcribe client calls, voicemail tickets, meeting recordings' },
-  { name:'elevenlabs', desc:'ElevenLabs text-to-speech SDK. Clone voices, generate natural speech.', use:'AI voiceovers for MIRROR video ads, SAGE voice alerts' },
-  { name:'deepgram', desc:'Speech recognition API. Real-time transcription, faster than Whisper, better accuracy.', use:'Real-time call transcription, live meeting notes, voice ticket creation' },
-  { name:'pinecone-client', desc:'Managed vector database. Cloud-hosted, scales to billions of vectors, production-ready.', use:'Production SAGE vector store when moving from local ChromaDB to cloud' },
-],
-
-'py-data': [
-  { name:'pandas', desc:'The Python data analysis library. DataFrames, time series, groupby, merge, pivot, plot.', use:'Every data processing task. Ad data, ticket data, financial data, everything.' },
-  { name:'polars', desc:'Blazing fast DataFrame library. 5-10x faster than pandas. Lazy evaluation, parallel processing.', use:'Processing large ticket datasets (500k rows), performance-critical pipelines' },
-  { name:'numpy', desc:'Fundamental package for numerical computation. N-dimensional arrays, linear algebra, FFT.', use:'ML model inputs, numerical computations, array operations for ATLAS' },
-  { name:'scipy', desc:'Scientific computing. Statistics, signal processing, optimization, linear algebra.', use:'Statistical significance testing for AB tests, signal analysis for ATLAS' },
-  { name:'scikit-learn', desc:'Machine learning in Python. Classification, regression, clustering, preprocessing, model selection.', use:'SAGE ticket classifier, ATLAS failure predictor, MIRROR customer segmentation' },
-  { name:'xgboost', desc:'Optimized gradient boosting. Often beats deep learning on tabular data. Kaggle winner.', use:'SAGE predictive failure model, MIRROR conversion prediction, churn prediction' },
-  { name:'lightgbm', desc:'Fast gradient boosting by Microsoft. Faster than XGBoost, handles categorical features.', use:'Alternative to XGBoost when training on large ticket datasets' },
-  { name:'torch', desc:'PyTorch. Deep learning framework. Neural networks, GPU acceleration, custom model training.', use:'Custom NLP model for Dutch tickets, time-series prediction for ATLAS' },
-  { name:'matplotlib', desc:'Comprehensive plotting library. Any type of chart, full control, publication quality.', use:'Data analysis visualizations, model performance plots, research charts' },
-  { name:'seaborn', desc:'Statistical visualization built on matplotlib. Beautiful by default. Heatmaps, distributions.', use:'Correlation heatmaps, distribution plots, statistical analysis charts' },
-  { name:'plotly', desc:'Interactive Python charts. 40+ chart types, 3D, animated, export to HTML.', use:'Interactive analysis dashboards, Jupyter notebook visualizations' },
-  { name:'statsmodels', desc:'Statistical models and tests. Time series analysis, regression, hypothesis testing.', use:'ATLAS time series analysis, ticket trend forecasting, statistical reporting' },
-  { name:'optuna', desc:'Hyperparameter optimization framework. AutoML. Find best model parameters automatically.', use:'Optimize ML models for SAGE and ATLAS without manual tuning' },
-  { name:'mlflow', desc:'ML lifecycle management. Track experiments, log metrics, version models, deploy.', use:'Track SAGE model experiments, compare model versions, production deployment' },
-  { name:'numba', desc:'JIT compiler for Python. Makes numeric Python code run at C speed.', use:'Speed up custom ATLAS strategy calculations, process large telemetry datasets' },
-  { name:'pyarrow', desc:'Apache Arrow Python bindings. Fast columnar data format. Read/write Parquet files.', use:'High-performance data storage, interchange with databases and data warehouses' },
-],
-
-'py-web': [
-  { name:'requests', desc:'The simplest HTTP library for Python. GET, POST, sessions, auth, headers. The standard.', use:'Every API call in Python. Meta API, Shopify API, any REST API.' },
-  { name:'httpx', desc:'Modern HTTP client. Like requests but async-first, HTTP/2 support, better streaming.', use:'Async API calls in FastAPI, concurrent requests for faster scraping' },
-  { name:'aiohttp', desc:'Async HTTP client and server. Handles thousands of concurrent requests.', use:'High-volume scraping, concurrent API calls, real-time data feeds' },
-  { name:'beautifulsoup4', desc:'HTML and XML parsing. Extract data from any web page. Works with requests.', use:'Scraping Meta Ad Library, AliExpress products, MSP vendor sites, NCSC bulletins' },
-  { name:'lxml', desc:'Fast C-based XML/HTML parser. 10x faster than Python parser for large documents.', use:'High-volume HTML scraping, XML feed processing, sitemap parsing' },
-  { name:'playwright', desc:'Browser automation by Microsoft. Headless Chrome, Firefox, WebKit. JavaScript execution.', use:'Scrape JavaScript-rendered pages, automate Shopify, test web applications' },
-  { name:'selenium', desc:'Browser automation. Older but more compatible. Works when Playwright is blocked.', use:'Legacy site automation, sites that detect headless browsers, form filling' },
-  { name:'scrapy', desc:'Full web scraping framework. Spiders, pipelines, middleware, rate limiting, cloud deployment.', use:'Large-scale systematic scraping, structured crawls, production scraping jobs' },
-  { name:'cloudscraper', desc:'Bypass Cloudflare protection. Drop-in replacement for requests that handles JS challenges.', use:'Scrape Cloudflare-protected sites, competitor intel, supplier data' },
-  { name:'fake-useragent', desc:'Generates realistic browser user agents. Rotate to avoid bot detection.', use:'Stealth scraping, avoid rate limiting, appear as real browser' },
-  { name:'curl-cffi', desc:'Python binding to curl-impersonate. Perfectly impersonates browser TLS fingerprints.', use:'Bypass sophisticated bot detection, scrape heavily protected sites' },
-  { name:'selectolax', desc:'Blazing fast HTML parser based on Modest/Lexbor. 30x faster than BeautifulSoup.', use:'High-volume HTML parsing when speed is critical, processing millions of pages' },
-],
-
-'py-backend': [
-  { name:'fastapi', desc:'Modern Python web framework. Automatic OpenAPI docs, type validation, async support.', use:'SAGE API server, MIRROR backend, any production API we build' },
-  { name:'uvicorn', desc:'Lightning-fast ASGI server. Runs FastAPI and Starlette applications.', use:'Production server for all FastAPI applications' },
-  { name:'pydantic', desc:'Data validation using Python type annotations. Define models, validate inputs automatically.', use:'API request/response models, configuration management, data contracts' },
-  { name:'sqlalchemy', desc:'Python SQL toolkit and ORM. Connect to PostgreSQL, MySQL, SQLite, any database.', use:'Database layer for SAGE ticket store, MIRROR data, ATLAS trade log' },
-  { name:'alembic', desc:'Database migration tool for SQLAlchemy. Version control for your database schema.', use:'Manage schema changes without losing data as systems evolve' },
-  { name:'psycopg2-binary', desc:'PostgreSQL adapter for Python. Fast, feature-complete, production-proven.', use:'Connect Python to PostgreSQL for all production databases' },
-  { name:'pymongo', desc:'Official MongoDB driver. Document databases, flexible schema, great for varied data.', use:'Store unstructured ticket data, ad creative metadata, client profiles' },
-  { name:'motor', desc:'Async MongoDB driver. Non-blocking MongoDB queries for FastAPI applications.', use:'Async database queries in FastAPI SAGE API server' },
-  { name:'redis', desc:'Redis Python client. Caching, sessions, pub/sub, queues, rate limiting.', use:'Cache AI responses, session storage, real-time event queuing' },
-  { name:'celery', desc:'Distributed task queue. Run background jobs, scheduled tasks, distributed processing.', use:'Background AI processing, scheduled scrapers, daily SAGE morning reports' },
-  { name:'apscheduler', desc:'Advanced Python scheduler. Cron, interval, date triggers. In-process scheduling.', use:'Daily Windows Update scan at 06:00, scheduled MIRROR scraper runs' },
-  { name:'websockets', desc:'Python WebSocket library. Build real-time bidirectional communication servers.', use:'Real-time SAGE dashboard updates, live fleet monitoring push' },
-  { name:'python-dotenv', desc:'Load environment variables from .env files. Keep secrets out of code.', use:'Every single project. API keys, database URLs, configuration.' },
-  { name:'loguru', desc:'Python logging made painless. Beautiful colored output, file rotation, structured logging.', use:'All application logging. Replace print() with proper logs in every project.' },
-  { name:'rich', desc:'Rich text and beautiful formatting in the terminal. Tables, progress bars, panels, markdown.', use:'Beautiful CLI output for scripts, progress display, development feedback' },
-],
-
-'py-finance': [
-  { name:'MetaTrader5', desc:'Official MT5 Python integration. Real-time prices, order execution, account management.', use:'ATLAS: connect to IC Markets, get live prices, execute trades automatically' },
-  { name:'yfinance', desc:'Download Yahoo Finance data. Historical prices, fundamentals, options, news for free.', use:'ATLAS backtesting data, market research, competitor financial analysis' },
-  { name:'ccxt', desc:'Crypto trading library. Connect to 100+ exchanges with one unified API.', use:'ATLAS crypto trading on BTC, crypto exchange integration, CEX/DEX data' },
-  { name:'pandas-ta', desc:'Technical analysis library for pandas. 130+ indicators — RSI, MACD, Bollinger, EMA.', use:'ATLAS strategy indicators, signal generation, trend analysis' },
-  { name:'backtesting', desc:'Backtesting framework. Test strategies on historical data. Fast, Pythonic, Plotly charts.', use:'ATLAS strategy validation before live trading' },
-  { name:'backtrader', desc:'Full-featured backtesting platform. Multiple data feeds, broker simulation, analyzers.', use:'ATLAS comprehensive strategy backtesting, walk-forward optimization' },
-  { name:'quantstats', desc:'Portfolio performance analysis. Sharpe, drawdown, tearsheet, benchmarking, HTML reports.', use:'ATLAS performance reporting, prop firm challenge prep, strategy evaluation' },
-  { name:'ta-lib', desc:'Technical Analysis Library. C-based, extremely fast. 150+ indicators used by professionals.', use:'ATLAS production indicators — faster than pandas-ta for live trading' },
-  { name:'alpaca-trade-api', desc:'Commission-free US stock trading API. Paper trading, live trading, market data.', use:'US stock trading for ATLAS expansion, paper trading environment' },
-  { name:'marketaux', desc:'Financial news API. Real-time news with sentiment scores for any stock/crypto/commodity.', use:'ATLAS news sentiment layer — trade with sentiment signals' },
-],
-
-'py-docs': [
-  { name:'python-docx', desc:'Create and modify Word documents. Paragraphs, tables, images, headers, styles.', use:'Auto-generate proposals, client reports, SF-ICT ticket summaries as Word docs' },
-  { name:'openpyxl', desc:'Read and write Excel files. Formatting, formulas, charts, pivot tables, images.', use:'Ad intelligence Excel export, financial reports, data delivery to non-technical clients' },
-  { name:'xlsxwriter', desc:'Create Excel files with advanced formatting. Charts, conditional formatting, data validation.', use:'Professional Excel reports, formatted financial statements, color-coded outputs' },
-  { name:'pdfplumber', desc:'Extract text, tables, and metadata from PDFs. Handles complex layouts.', use:'Extract data from client invoices, contracts, scanned documents, PSA exports' },
-  { name:'pymupdf', desc:'Fastest PDF library. Read, write, render PDFs. OCR support. 10x faster than PyPDF2.', use:'High-volume PDF processing, PDF rendering for comparison, annotation extraction' },
-  { name:'reportlab', desc:'Generate PDFs programmatically. Full control over layout, fonts, graphics, tables.', use:'Generate beautiful PDF proposals, invoices, client reports from Python' },
-  { name:'python-pptx', desc:'Create and modify PowerPoint presentations. Slides, shapes, charts, images, themes.', use:'Auto-generate slide decks, client presentations, SAGE weekly report slides' },
-  { name:'pillow', desc:'Python Imaging Library. Open, manipulate, save images. Resize, crop, filter, draw.', use:'Image processing for ads, thumbnail generation, screenshot processing' },
-  { name:'pytesseract', desc:'OCR — extract text from images. Powered by Google Tesseract. 100+ languages.', use:'Extract text from screenshots, process scanned tickets, read image-based invoices' },
-  { name:'easyocr', desc:'Ready-to-use OCR. Better accuracy than Tesseract. 80+ languages. GPU accelerated.', use:'High-accuracy text extraction from complex images and documents' },
-],
-
-'py-util': [
-  { name:'tqdm', desc:'Instant progress bars for Python loops. Essential for long-running scripts.', use:'Every data processing script, scraping progress, model training feedback' },
-  { name:'schedule', desc:'Job scheduling for humans. Run functions at intervals with cron-like syntax.', use:'Daily scrapers, hourly data refresh, weekly reports — simple in-process scheduling' },
-  { name:'watchdog', desc:'Monitor filesystem events. React when files change, are created, or deleted.', use:'Auto-reload configs, watch for new data files, hot-reload development tools' },
-  { name:'psutil', desc:'Cross-platform system and process utilities. CPU, memory, disk, network monitoring.', use:'Monitor server health in SAGE, resource usage alerts, system diagnostics' },
-  { name:'paramiko', desc:'Python SSH2 protocol library. Connect to remote servers, execute commands, SFTP.', use:'Remote server management, automated deployments, data collection from remote systems' },
-  { name:'cryptography', desc:'Cryptographic primitives. AES encryption, RSA, TLS, certificates, password hashing.', use:'Encrypt sensitive data at rest, API key protection, secure credential storage' },
-  { name:'pycountry', desc:'ISO country, language, currency, language data. Convert between codes and names.', use:'Process geo data from Meta Ads, validate client country data, multi-language systems' },
-  { name:'phonenumbers', desc:'Parse, format, validate international phone numbers (Google libphonenumber).', use:'Client contact data validation, CRM cleanup, international number formatting' },
-  { name:'validators', desc:'Simple data validation. URLs, emails, IP addresses, UUIDs, cards — one function each.', use:'Input validation in APIs, data cleaning, form validation backend' },
-  { name:'humanize', desc:'Turn numbers and dates into human-readable strings. "3 days ago", "1.2 million".', use:'Dashboard display text, notification messages, report summaries' },
-  { name:'arrow', desc:'Better dates for Python. Timezone-aware, human-friendly, inspired by moment.js.', use:'Timezone handling for Dutch/Swiss operations, clean date formatting' },
-  { name:'faker', desc:'Generate fake data. Names, addresses, emails, companies, phone numbers, credit cards.', use:'Test data generation, demo data for presentations, development without real data' },
-  { name:'black', desc:'The uncompromising Python code formatter. Auto-format all Python code to one style.', use:'Keep all Python code consistently formatted. Run before every commit.' },
-  { name:'pytest', desc:'The standard Python testing framework. Fixtures, parameterize, plugins, coverage.', use:'Test all Python code. Unit tests, integration tests, API tests.' },
-  { name:'typer', desc:'Build CLI applications with Python type hints. Automatic --help, argument parsing.', use:'Build CLI tools for SAGE administration, MIRROR automation scripts' },
-  { name:'pyfiglet', desc:'ASCII art text. Print large stylized text in the terminal.', use:'Script banners, terminal dashboards, visually identify script outputs' },
-  { name:'qrcode', desc:'Generate QR codes as PNG or SVG from any data string.', use:'Share links, mobile handoff, product QR codes, contact card generation' },
-],
-
-};
-
-// ═══════════════════════════════════════════════════════
-//  CATEGORY COLORS
-// ═══════════════════════════════════════════════════════
 const CAT_COLORS = {
   animation:'#1BA2D2', charts:'#E4067D', '3d':'#766A86',
   ui:'#0477AE', maps:'#0a7040', media:'#b45000',
   utility:'#232430', realtime:'#b52a1c',
   'py-ai':'#7c3aed', 'py-data':'#1BA2D2', 'py-web':'#E4067D',
   'py-backend':'#0477AE', 'py-finance':'#0a7040',
-  'py-docs':'#b45000', 'py-util':'#766A86',
+  'py-docs':'#b45000', 'py-util':'#766A86'
 };
 
 // ═══════════════════════════════════════════════════════
-//  RENDER ENGINE
+//  STATE
 // ═══════════════════════════════════════════════════════
-
 let currentSection = 'animation';
+let currentProject = 'all';
+const FAV_KEY = 'polypus_devkit_favs_v1';
+const favs = new Set(JSON.parse(localStorage.getItem(FAV_KEY) || '[]'));
 
-function showSection(sec, el) {
-  currentSection = sec;
-  document.querySelectorAll('.s-item').forEach(i => i.classList.remove('active'));
-  if(el) el.classList.add('active');
-  if(sec === 'install') { renderInstall(); return; }
-  if(JS_LIBS[sec]) renderJS(sec);
-  else if(PY_PKGS[sec]) renderPY(sec);
+function saveFavs(){ localStorage.setItem(FAV_KEY, JSON.stringify([...favs])); }
+function favId(type, name){ return `${type}:${name}`; }
+
+// ═══════════════════════════════════════════════════════
+//  FILTERING
+// ═══════════════════════════════════════════════════════
+function filterByProject(items, type){
+  if(currentProject === 'all') return items;
+  if(currentProject === 'fav') return items.filter(i => favs.has(favId(type, i.name)));
+  return items.filter(i => (i.projects||[]).includes(currentProject));
 }
 
-function renderJS(sec) {
-  const libs = JS_LIBS[sec];
+// ═══════════════════════════════════════════════════════
+//  RENDERERS
+// ═══════════════════════════════════════════════════════
+function renderJS(sec){
+  const all = JS_LIBS[sec] || [];
+  const libs = filterByProject(all, 'js');
   const color = CAT_COLORS[sec] || '#1BA2D2';
-  const content = document.getElementById('content');
-  content.innerHTML = `
-    <div class="sec-hdr">
-      <div class="sec-hdr-title">${sec.charAt(0).toUpperCase()+sec.slice(1).replace(/([A-Z])/g,' $1')} Libraries</div>
-      <span class="sec-hdr-count">${libs.length} libraries</span>
-    </div>
-    <div class="lib-grid">
-      ${libs.map((l,i) => `
-        <div class="lib-card" style="animation:up .25s ${i*.025}s both">
-          <button class="copy-btn" onclick="copyText(\`<script src=&quot;${l.cdn}&quot;></scr\`+\`ipt>\`, '${l.name}')">Copy CDN</button>
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
-            <div class="lib-name">${l.name}</div>
-          </div>
-          <div>${(l.tags||[]).map(t=>`<span class="tag" style="background:${color}18;color:${color}">${t}</span>`).join('')}</div>
-          <div class="lib-desc">${l.desc}</div>
-          <div class="lib-use"><strong style="color:${color}">Use for:</strong> ${l.use}</div>
-          <div class="lib-cdn" onclick="copyText('${l.cdn}', '${l.name} CDN')">${l.cdn}</div>
-        </div>
-      `).join('')}
-    </div>
-  `;
-}
-
-function renderPY(sec) {
-  const pkgs = PY_PKGS[sec];
-  const color = CAT_COLORS[sec] || '#7c3aed';
-  const content = document.getElementById('content');
-  content.innerHTML = `
-    <div class="sec-hdr">
-      <div class="sec-hdr-title">${sec.replace('py-','').charAt(0).toUpperCase()+sec.replace('py-','').slice(1)} Python Packages</div>
-      <span class="sec-hdr-count">${pkgs.length} packages</span>
-    </div>
-    <div style="background:#0f0f1a;border-radius:8px;padding:14px;font-family:'JetBrains Mono',monospace;font-size:11px;margin-bottom:16px;display:flex;align-items:center;gap:10px">
-      <span style="color:rgba(255,255,255,.3)">pip install</span>
-      <span style="color:${color}">${pkgs.map(p=>p.name).join(' ')}</span>
-      <button onclick="copyText('pip install ${pkgs.map(p=>p.name).join(' ')}', 'pip install command')" style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:9px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.6);padding:4px 10px;border-radius:4px;cursor:pointer">Copy pip install</button>
-    </div>
-    <div class="py-grid">
-      ${pkgs.map((p,i) => `
-        <div class="py-pkg" onclick="copyText('pip install ${p.name}', '${p.name}')" style="animation:up .2s ${i*.02}s both">
-          <div class="py-pkg-name">${p.name}</div>
-          <div class="py-pkg-desc">${p.desc}</div>
-          <div class="py-install" style="color:${color}">→ ${p.use.substring(0,60)}${p.use.length>60?'...':''}</div>
-        </div>
-      `).join('')}
-    </div>
-  `;
-}
-
-function renderInstall() {
-  const allPy = Object.values(PY_PKGS).flat().map(p=>p.name);
-  const allJs = Object.values(JS_LIBS).flat().map(l=>`<!-- ${l.name} -->\n<script src="${l.cdn}"><\/script>`);
+  const title = CAT_LABELS[sec] || sec;
   document.getElementById('content').innerHTML = `
-    <div class="sec-hdr"><div class="sec-hdr-title">Full Install Scripts</div></div>
-    <div style="margin-bottom:16px">
-      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between">
-        Python — all ${allPy.length} packages
-        <button onclick="copyText('pip install ${allPy.join(' ')}', 'All Python packages')" style="font-family:'JetBrains Mono',monospace;font-size:10px;background:var(--ink);color:white;border:none;padding:6px 14px;border-radius:5px;cursor:pointer">Copy pip install all</button>
-      </div>
-      <div class="pip-block">pip install ${allPy.join(' \\\n  ')}</div>
+    <div class="sec-hdr">
+      <div class="sec-hdr-title">${title}</div>
+      <span class="sec-hdr-count">${libs.length}${libs.length !== all.length ? ` of ${all.length}` : ''} libraries</span>
+      ${currentProject !== 'all' ? `<span class="sec-hdr-meta">Filter: ${currentProject === 'fav' ? '★ favorites' : currentProject}</span>` : ''}
     </div>
-    <div>
-      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;margin-bottom:8px">Node — global packages</div>
-      <div class="pip-block">npm install -g vercel netlify-cli serve http-server nodemon pm2 typescript ts-node vite @anthropic-ai/sdk prettier eslint concurrently dotenv-cli json-server localtunnel</div>
+    ${libs.length ? `<div class="lib-grid">${libs.map((l,i) => jsCard(l, sec, color, i)).join('')}</div>` :
+      `<div style="text-align:center;padding:48px;color:var(--purple)">No libraries match this filter.</div>`}
+  `;
+}
+
+function jsCard(l, sec, color, i){
+  const fid = favId('js', l.name);
+  const starred = favs.has(fid);
+  const projs = (l.projects || []).map(p => `<span class="proj-tag">${p}</span>`).join('');
+  const tags = (l.tags || []).map(t => `<span class="tag" style="background:${color}18;color:${color}">${t}</span>`).join('');
+  return `
+    <div class="lib-card" style="animation:up .25s ${i*.025}s both">
+      <button class="fav-btn ${starred?'starred':''}" data-fav="${fid}" title="Favorite">${starred?'★':'☆'}</button>
+      <button class="copy-btn" data-copy-cdn="${encodeURIComponent(l.cdn)}" data-name="${l.name}">Copy CDN</button>
+      <div class="lib-name">${l.name}</div>
+      <div>${tags}${projs}</div>
+      <div class="lib-desc">${l.desc}</div>
+      <div class="lib-use"><strong style="color:${color}">Use for:</strong> ${l.use}</div>
+      <div class="lib-cdn" data-copy-cdn="${encodeURIComponent(l.cdn)}" data-name="${l.name} CDN">${l.cdn || '(native browser API — no CDN)'}</div>
     </div>
   `;
 }
 
-function copyText(text, label) {
-  navigator.clipboard.writeText(text).then(() => {
-    const t = document.getElementById('toast');
-    t.textContent = (label||'') + ' copied ✓';
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2000);
+function renderPY(sec){
+  const all = PY_PKGS[sec] || [];
+  const pkgs = filterByProject(all, 'py');
+  const color = CAT_COLORS[sec] || '#7c3aed';
+  const title = CAT_LABELS[sec] || sec;
+  const pipList = pkgs.map(p => p.name).join(' ');
+  document.getElementById('content').innerHTML = `
+    <div class="sec-hdr">
+      <div class="sec-hdr-title">${title}</div>
+      <span class="sec-hdr-count">${pkgs.length}${pkgs.length !== all.length ? ` of ${all.length}` : ''} packages</span>
+      ${currentProject !== 'all' ? `<span class="sec-hdr-meta">Filter: ${currentProject === 'fav' ? '★ favorites' : currentProject}</span>` : ''}
+    </div>
+    ${pkgs.length ? `
+      <div style="background:#0f0f1a;border-radius:8px;padding:14px;font-family:'JetBrains Mono',monospace;font-size:11px;margin-bottom:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <span style="color:rgba(255,255,255,.3)">pip install</span>
+        <span style="color:${color};word-break:break-word;flex:1;min-width:200px">${pipList}</span>
+        <button data-copy="${encodeURIComponent('pip install ' + pipList)}" data-name="pip install command" style="font-family:'JetBrains Mono',monospace;font-size:9px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.6);padding:4px 10px;border-radius:4px;cursor:pointer">Copy pip install</button>
+      </div>
+      <div class="py-grid">${pkgs.map((p,i) => pyCard(p, sec, color, i)).join('')}</div>
+    ` : `<div style="text-align:center;padding:48px;color:var(--purple)">No packages match this filter.</div>`}
+  `;
+}
+
+function pyCard(p, sec, color, i){
+  const fid = favId('py', p.name);
+  const starred = favs.has(fid);
+  const projs = (p.projects || []).map(pr => `<span class="proj-tag">${pr}</span>`).join(' ');
+  return `
+    <div class="py-pkg" data-copy="${encodeURIComponent('pip install ' + p.name)}" data-name="${p.name}" style="animation:up .2s ${i*.02}s both">
+      <button class="fav-btn ${starred?'starred':''}" data-fav="${fid}" title="Favorite">${starred?'★':'☆'}</button>
+      <div class="py-pkg-name">${p.name}</div>
+      <div class="py-pkg-desc">${p.desc}</div>
+      ${projs ? `<div style="margin-top:3px">${projs}</div>` : ''}
+      <div class="py-install" style="color:${color}">→ ${p.use.substring(0,60)}${p.use.length>60?'...':''}</div>
+    </div>
+  `;
+}
+
+function renderInstallPy(){
+  const allPy = Object.values(PY_PKGS).flat().map(p=>p.name);
+  document.getElementById('content').innerHTML = `
+    <div class="sec-hdr"><div class="sec-hdr-title">Full pip install script</div><span class="sec-hdr-count">${allPy.length} packages</span></div>
+    <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between">
+      Python — all packages (recommended: activate venv first)
+      <button data-copy="${encodeURIComponent('pip install ' + allPy.join(' '))}" data-name="All Python packages" class="btn-dark" style="padding:6px 14px;font-size:10px">Copy pip install all</button>
+    </div>
+    <div class="pip-block">pip install ${allPy.join(' \\\n  ')}</div>
+  `;
+}
+
+function renderInstallNode(){
+  const cmd = 'npm install -g vercel netlify-cli serve http-server nodemon pm2 typescript ts-node vite @anthropic-ai/sdk prettier eslint concurrently dotenv-cli json-server localtunnel';
+  document.getElementById('content').innerHTML = `
+    <div class="sec-hdr"><div class="sec-hdr-title">Node globals</div></div>
+    <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between">
+      Node — global tools
+      <button data-copy="${encodeURIComponent(cmd)}" data-name="Node globals" class="btn-dark" style="padding:6px 14px;font-size:10px">Copy npm install</button>
+    </div>
+    <div class="pip-block">${cmd.replace(/ /g, ' \\\n  ').replace('npm \\\n  install', 'npm install')}</div>
+  `;
+}
+
+function renderInstallBundle(){
+  const allJs = Object.values(JS_LIBS).flat()
+    .filter(l => l.cdn && l.cdn.startsWith('http'))
+    .map(l => `<!-- ${l.name} -->\n<script src="${l.cdn}"><\/script>`).join('\n');
+  document.getElementById('content').innerHTML = `
+    <div class="sec-hdr"><div class="sec-hdr-title">Full JS CDN bundle</div><span class="sec-hdr-count">${Object.values(JS_LIBS).flat().filter(l => l.cdn && l.cdn.startsWith('http')).length} scripts</span></div>
+    <div style="font-family:'Instrument Sans',sans-serif;font-size:12px;color:var(--purple);margin-bottom:8px">Paste directly into your &lt;head&gt;. Drop the scripts you don't need — don't actually load all of these on one page.</div>
+    <div style="display:flex;justify-content:flex-end;margin-bottom:8px"><button data-copy="${encodeURIComponent(allJs)}" data-name="Full CDN bundle" class="btn-dark" style="padding:6px 14px;font-size:10px">Copy all script tags</button></div>
+    <div class="pip-block">${allJs.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
+  `;
+}
+
+// ═══════════════════════════════════════════════════════
+//  ROUTER
+// ═══════════════════════════════════════════════════════
+function showSection(sec){
+  currentSection = sec;
+  document.querySelectorAll('.s-item').forEach(i => {
+    i.classList.toggle('active', i.dataset.section === sec);
   });
+  if(sec === 'install-py') return renderInstallPy();
+  if(sec === 'install-node') return renderInstallNode();
+  if(sec === 'install-bundle') return renderInstallBundle();
+  if(JS_LIBS[sec]) return renderJS(sec);
+  if(PY_PKGS[sec]) return renderPY(sec);
 }
 
-function copyAllPip() {
-  const all = Object.values(PY_PKGS).flat().map(p=>p.name).join(' ');
-  copyText('pip install ' + all, 'All pip packages');
-}
-
-function searchLibs(q) {
-  if(!q) { showSection(currentSection, null); return; }
+// ═══════════════════════════════════════════════════════
+//  SEARCH
+// ═══════════════════════════════════════════════════════
+function searchLibs(q){
+  if(!q){ showSection(currentSection); return; }
   const term = q.toLowerCase();
+  const match = (hay) => (hay||'').toLowerCase().includes(term);
   const jsResults = Object.entries(JS_LIBS).flatMap(([cat, libs]) =>
-    libs.filter(l => l.name.toLowerCase().includes(term) || l.desc.toLowerCase().includes(term) || l.use.toLowerCase().includes(term))
-      .map(l => ({...l, _cat:cat, _type:'js'}))
+    libs.filter(l => match(l.name) || match(l.desc) || match(l.use) || (l.tags||[]).some(match) || (l.projects||[]).some(match))
+      .map(l => ({...l, _cat:cat}))
   );
   const pyResults = Object.entries(PY_PKGS).flatMap(([cat, pkgs]) =>
-    pkgs.filter(p => p.name.toLowerCase().includes(term) || p.desc.toLowerCase().includes(term))
-      .map(p => ({...p, _cat:cat, _type:'py'}))
+    pkgs.filter(p => match(p.name) || match(p.desc) || match(p.use) || (p.projects||[]).some(match))
+      .map(p => ({...p, _cat:cat}))
   );
   const color = '#1BA2D2';
   document.getElementById('content').innerHTML = `
     <div class="sec-hdr">
-      <div class="sec-hdr-title">Search: "${q}"</div>
+      <div class="sec-hdr-title">Search: "${q.replace(/[<>]/g,'')}"</div>
       <span class="sec-hdr-count">${jsResults.length + pyResults.length} results</span>
     </div>
     ${jsResults.length ? `
       <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--purple);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">JS Libraries (${jsResults.length})</div>
       <div class="lib-grid" style="margin-bottom:24px">
-        ${jsResults.map(l=>`
-          <div class="lib-card">
-            <button class="copy-btn" onclick="copyText('${l.cdn}', '${l.name}')">Copy CDN</button>
-            <div class="lib-name">${l.name}</div>
-            <div class="lib-desc">${l.desc}</div>
-            <div class="lib-use"><strong style="color:${color}">Use:</strong> ${l.use}</div>
-            <div class="lib-cdn">${l.cdn}</div>
-          </div>`).join('')}
+        ${jsResults.map((l,i) => jsCard(l, l._cat, CAT_COLORS[l._cat] || color, i)).join('')}
       </div>` : ''}
     ${pyResults.length ? `
       <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--purple);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Python Packages (${pyResults.length})</div>
       <div class="py-grid">
-        ${pyResults.map(p=>`
-          <div class="py-pkg" onclick="copyText('pip install ${p.name}', '${p.name}')">
-            <div class="py-pkg-name">${p.name}</div>
-            <div class="py-pkg-desc">${p.desc}</div>
-          </div>`).join('')}
+        ${pyResults.map((p,i) => pyCard(p, p._cat, CAT_COLORS[p._cat] || color, i)).join('')}
       </div>` : ''}
     ${!jsResults.length && !pyResults.length ? '<div style="text-align:center;padding:48px;color:var(--purple)">No results found</div>' : ''}
   `;
 }
 
-// Update sidebar counts
-function updateCounts() {
+// ═══════════════════════════════════════════════════════
+//  COPY + TOAST
+// ═══════════════════════════════════════════════════════
+function copyText(text, label){
+  navigator.clipboard.writeText(text).then(() => {
+    const t = document.getElementById('toast');
+    t.textContent = (label || 'Copied') + ' ✓';
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2000);
+  }).catch(err => {
+    const t = document.getElementById('toast');
+    t.textContent = 'Copy failed — check clipboard permissions';
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2000);
+  });
+}
+
+function copyAllPip(){
+  const all = Object.values(PY_PKGS).flat().map(p=>p.name).join(' ');
+  copyText('pip install ' + all, 'All pip packages');
+}
+
+// ═══════════════════════════════════════════════════════
+//  SIDEBAR COUNTS
+// ═══════════════════════════════════════════════════════
+function updateCounts(){
   let total = 0;
   Object.entries(JS_LIBS).forEach(([k,v]) => {
     const el = document.getElementById('sc-'+k);
@@ -588,14 +657,72 @@ function updateCounts() {
   document.getElementById('total-count').textContent = total;
 }
 
-// CSS anim
-const s = document.createElement('style');
-s.textContent = '@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}';
-document.head.appendChild(s);
+// ═══════════════════════════════════════════════════════
+//  DELEGATED EVENT HANDLERS (no more inline onclick bombs)
+// ═══════════════════════════════════════════════════════
+document.addEventListener('click', e => {
+  // Sidebar nav
+  const sItem = e.target.closest('.s-item');
+  if(sItem){ showSection(sItem.dataset.section); return; }
+  // Project chips
+  const chip = e.target.closest('.chip');
+  if(chip){
+    currentProject = chip.dataset.proj;
+    document.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c === chip));
+    const q = document.getElementById('search').value;
+    if(q) searchLibs(q); else showSection(currentSection);
+    return;
+  }
+  // Favorite star
+  const fav = e.target.closest('[data-fav]');
+  if(fav){
+    e.stopPropagation();
+    const id = fav.dataset.fav;
+    if(favs.has(id)){ favs.delete(id); fav.classList.remove('starred'); fav.textContent='☆'; }
+    else { favs.add(id); fav.classList.add('starred'); fav.textContent='★'; }
+    saveFavs();
+    return;
+  }
+  // Copy CDN URL
+  const cdnCopy = e.target.closest('[data-copy-cdn]');
+  if(cdnCopy){
+    const text = decodeURIComponent(cdnCopy.dataset.copyCdn);
+    const snippet = text.startsWith('http') ? `<script src="${text}"></` + `script>` : text;
+    copyText(snippet, cdnCopy.dataset.name);
+    return;
+  }
+  // Copy arbitrary text
+  const copyEl = e.target.closest('[data-copy]');
+  if(copyEl){
+    copyText(decodeURIComponent(copyEl.dataset.copy), copyEl.dataset.name);
+    return;
+  }
+});
 
-// INIT
+// ═══════════════════════════════════════════════════════
+//  KEYBOARD SHORTCUTS
+// ═══════════════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  const search = document.getElementById('search');
+  // `/` to focus search (ignore if already typing in an input)
+  if(e.key === '/' && document.activeElement !== search){
+    e.preventDefault();
+    search.focus();
+    search.select();
+  }
+  // Esc to clear search
+  if(e.key === 'Escape' && document.activeElement === search){
+    search.value = '';
+    searchLibs('');
+    search.blur();
+  }
+});
+
+// ═══════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════
 updateCounts();
-showSection('animation', document.querySelector('.s-item'));
+showSection('animation');
 </script>
 </body>
 </html>
